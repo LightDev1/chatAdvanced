@@ -5,11 +5,18 @@ import { Button, Block } from 'components';
 import { UserOutlined, LockOutlined, MailOutlined, InfoCircleTwoTone } from '@ant-design/icons';
 
 const RegisterForm = (props) => {
-    const success = true;
+    const success = false;
 
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
+    const {
+        values,
+        touched,
+        errors,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        isValid,
+        dirty,
+    } = props;
 
     return (
         <div>
@@ -20,49 +27,62 @@ const RegisterForm = (props) => {
             <Block>
                 {!success ? (
                     <Form
-                        name="normal_login"
                         className="login-form"
-                        initialValues={{ remember: true }}
-                        onFinish={onFinish}
+                        onSubmit={handleSubmit}
                     >
 
                         <Form.Item
                             name="email"
+                            validateStatus={
+                                !touched.email ? '' : errors.email ? 'error' : 'success'
+                            }
                             rules={[{ required: true, message: 'Please input your E-mail!' }]}
                             hasFeedback
+                            help={touched.email && errors.email}
                         >
                             <Input
+                                id="email"
                                 prefix={<MailOutlined />}
                                 placeholder="E-mail"
-
                                 size="large"
+                                value={values.email}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
                             />
                         </Form.Item>
                         <Form.Item
                             name="username"
                             rules={[{ required: true, message: 'Please input your Username!' }]}
                             hasFeedback
-                            validateStatus="success"
                         >
                             <Input
                                 prefix={<UserOutlined className="site-form-item-icon" />}
                                 placeholder="Ваше имя"
                                 size="large"
+                                value={'fdffdffd'}
                             />
                         </Form.Item>
                         <Form.Item
                             name="password"
                             rules={[{ required: true, message: 'Please input your Password!' }]}
+                            validateStatus={
+                                !touched.password ? '' : errors.password ? 'error' : 'success'
+                            }
+                            help={touched.password && errors.password}
                         >
                             <Input
+                                id='password'
                                 prefix={<LockOutlined className="site-form-item-icon" />}
                                 type="password"
                                 size="large"
                                 placeholder="Пароль"
+                                value={values.password}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
                             />
                         </Form.Item>
                         <Form.Item
-                            name="password"
+                            name="password2"
                             rules={[{ required: true, message: 'Please input your Password!' }]}
                         >
                             <Input
@@ -73,16 +93,22 @@ const RegisterForm = (props) => {
                             />
                         </Form.Item>
                         <Form.Item>
-                            <Button size="large" type="primary" htmlType="submit">
+                            {dirty && !isValid && <span>Ошибка!</span>}
+                            <Button
+                                onClick={handleSubmit}
+                                size="large"
+                                type="primary"
+                                htmlType="submit"
+                            >
                                 Зарегистрироваться
-                        </Button>
+                            </Button>
                         </Form.Item>
                         <Link
                             className="auth__register-link"
                             to="/login"
                         >
                             Войти в аккаунт
-                </Link>
+                        </Link>
                     </Form>
                 ) : <div className="auth__success-block">
                     <div>

@@ -4,6 +4,7 @@
    $self: &;
 
    &__content {
+      position: relative;
       display: flex;
       max-width: 440px;
       margin-bottom: 15px;
@@ -40,9 +41,35 @@
       line-height: 20px;
    }
 
+   &__attachments {
+      display: flex;
+      margin-bottom: 5px;
+
+      &-item {
+         margin-right: 5px;
+         cursor: pointer;
+         
+         img {
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+         }
+      }
+   }
+
+   &__icon-readed {
+      position: absolute;
+      bottom: 22px;
+      left: -25px;
+
+      &--no {
+         left: -20px;
+      }
+   }
+
    &--isme {
       display: flex;
-      flex-direction: column-reverse;
+      flex-direction: row-reverse;
 
       #{$self}__content {
          margin-bottom: 15px;
@@ -60,7 +87,7 @@
          text-align: right;
       }
 
-      #{$self}__buble {
+      #{$self}__bubble {
          background: #ffffff;
          border: 1px solid #ececec;
          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.0220444);
