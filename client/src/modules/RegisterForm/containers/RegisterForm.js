@@ -3,6 +3,13 @@ import RegisterForm from '../components/RegisterForm';
 import validateForm from 'utils/validate';
 
 export default withFormik({
+    enableReinitialize: true,
+    mapPropsToValues: () => ({
+        email: '',
+        fullname: '',
+        password: '',
+        password2: '',
+    }),
     validate: values => {
         let errors = {};
 

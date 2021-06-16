@@ -19,7 +19,7 @@
       width: 33px;
       height: 33px;
       margin-right: 13px;
-      margin-bottom: 23px;
+      margin-bottom: 5px;
      }
    }
 
@@ -98,4 +98,55 @@
          }
       }
    }
+
+   &--is-typing {
+      #{$self}__bubble {
+         background-color: $message-typing-blue;
+         box-shadow: 0px 5px 5px rgba(54, 116, 255, 0.04);
+         padding: 15px 18px;
+      }
+   }
+
+   &--image {
+      #{$self}__attachments {
+         &-item {
+            img {
+               width: 150px;
+               height: 150px;
+            }
+         }
+      }
+   }
+
+   &__typing {
+     span {
+      height: 8px;
+      width: 8px;
+      border-radius: 50%;
+      background: $message-typing-cirlcle;
+      display: inline-block;
+      margin-right: 7px; 
+      animation-name: typingAnimation;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+      animation-duration: .5s;
+
+      &:nth-of-type(2) {
+         animation-duration: .6s;
+         animation-delay: 0.5s;
+      }
+      &:nth-of-type(3) {
+         animation-duration: .7s;
+      }
+     }
+   }
 }
+
+@keyframes typingAnimation{
+   from {
+     opacity: 0;
+   }
+   to {
+      opacity: 1;
+   }
+ }

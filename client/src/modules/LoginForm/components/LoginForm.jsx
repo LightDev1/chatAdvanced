@@ -4,7 +4,7 @@ import { Form, Input } from 'antd';
 import { Button, Block } from 'components';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 
-const validate = (key, touched, errors) => {
+export const validate = (key, touched, errors) => {
     if (touched[key]) {
         if (errors[key]) {
             return 'error';
@@ -41,6 +41,7 @@ const LoginForm = (props) => {
                 >
                     <Form.Item
                         name="email"
+                        hasFeedback
                         validateStatus={validate('email', touched, errors)}
                         rules={[{ required: true, message: 'Please input your E-mail!' }]}
                         help={touched.email && errors.email}
@@ -57,10 +58,9 @@ const LoginForm = (props) => {
                     </Form.Item>
                     <Form.Item
                         name="password"
+                        hasFeedback
                         rules={[{ required: true, message: 'Please input your Password!' }]}
-                        validateStatus={
-                            !touched.password ? '' : errors.password ? 'error' : 'success'
-                        }
+                        validateStatus={validate('password', touched, errors)}
                         help={touched.password && errors.password}
                     >
                         <Input

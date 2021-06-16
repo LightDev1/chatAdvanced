@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Form, Input } from 'antd';
 import { Button, Block } from 'components';
 import { UserOutlined, LockOutlined, MailOutlined, InfoCircleTwoTone } from '@ant-design/icons';
+import { validateField } from 'utils/helpers';
 
 const RegisterForm = (props) => {
     const success = false;
@@ -33,9 +34,7 @@ const RegisterForm = (props) => {
 
                         <Form.Item
                             name="email"
-                            validateStatus={
-                                !touched.email ? '' : errors.email ? 'error' : 'success'
-                            }
+                            validateStatus={validateField('email', touched, errors)}
                             rules={[{ required: true, message: 'Please input your E-mail!' }]}
                             hasFeedback
                             help={touched.email && errors.email}
@@ -65,9 +64,7 @@ const RegisterForm = (props) => {
                         <Form.Item
                             name="password"
                             rules={[{ required: true, message: 'Please input your Password!' }]}
-                            validateStatus={
-                                !touched.password ? '' : errors.password ? 'error' : 'success'
-                            }
+                            validateStatus={validateField('password', touched, errors)}
                             help={touched.password && errors.password}
                         >
                             <Input
@@ -83,11 +80,12 @@ const RegisterForm = (props) => {
                         </Form.Item>
                         <Form.Item
                             name="password2"
+                            validateStatus={validateField('email', touched, errors)}
                             rules={[{ required: true, message: 'Please input your Password!' }]}
                         >
                             <Input
                                 prefix={<LockOutlined className="site-form-item-icon" />}
-                                type="password"
+                                type="password2"
                                 size="large"
                                 placeholder="Повторить пароль"
                             />
