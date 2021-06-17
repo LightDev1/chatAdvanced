@@ -1,38 +1,46 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Time, MessageIconReaded } from '../index';
+import { isToday, format } from 'date-fns';
+
+import { MessageIconReaded } from '../index';
 
 import './DialogItem.scss';
+
+const getMessageTime = (createdAt) => {
+    if (isToday(createdAt)) {
+        return format(createdAt, 'HH:mm');
+    } else {
+        return format(createdAt, 'dd.MM.YYY')
+    }
+}
 
 const getAvatar = (avatar) => {
     if (avatar) {
         return (
-            <img src="https://sun2.tele2-nn.userapi.com/s/v1/if1/pRhD7sGwZ5QIyygNGKi47eI5_BtAFeHPbrNVrPYKQFjnD24CaT3bCB_GghhEuZObJz6H_xmh.jpg?size=50x0&quality=96&crop=19,1,889,889&ava=1" alt={`avatar`} />
+            <img src={avatar} alt={`avatar`} />
         );
     } else {
         //make avatar
     }
 }
 
-const DialogItem = ({ user, message, unreaded }) => (
+const DialogItem = ({ user, text, createdAt, unreaded, isMe }) => (
     <div className={classNames('dialogs__item', {
         'dialogs__item--online': user.isOnline,
     })}>
         <div className="dialogs__item-avatar">
-            {/* <img src={user.avatar} alt={`${user.fullname} avatar`} /> */}
-            {getAvatar('https://sun2.tele2-nn.userapi.com/s/v1/if1/pRhD7sGwZ5QIyygNGKi47eI5_BtAFeHPbrNVrPYKQFjnD24CaT3bCB_GghhEuZObJz6H_xmh.jpg?size=50x0&quality=96&crop=19,1,889,889&ava=1')}
+            {getAvatar(user.avatar)}
         </div>
         <div className="dialogs__item-info">
             <div className="dialogs__item-info-top">
-                <b>Евгений Поносенко</b>
+                <b>{user.fullname}</b>
                 <span>
-                    {/* <Time date={new Date()} /> */}
-                    13:00
+                    {getMessageTime(createdAt)}
                 </span>
             </div>
             <div className="dialogs__item-info-bottom">
-                <p>Вчера Е3 смотрел, ну норм игры, сталкер выйдет, прикольно</p>
-                <MessageIconReaded isMe={true} isReaded={true} />
+                <p>{text}</p>
+                {isMe && <MessageIconReaded isMe={true} isReaded={true} />}
                 {unreaded > 0 && <div className="dialogs__item-info-bottom-count">{unreaded > 9 ? '9+' : unreaded}</div>}
             </div>
         </div>
