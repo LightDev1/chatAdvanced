@@ -4,19 +4,21 @@ import classNames from 'classnames';
 
 import { Time, MessageIconReaded } from '../index';
 
+import { convertCurrentTime } from 'utils/helpers';
+
 import waveSvg from 'assets/img/waves.svg';
 import playSvg from 'assets/img/play.svg';
 import pauseSvg from 'assets/img/pause.svg';
 
 import './Message.scss';
 
-const Message = ({ avatar, user, text, date, isMe, isReaded, attachments, isTyping, audio }) => {
-    const [isPlaying, setIsPlaying] = useState(false);
+const MessageAudio = ({ audioSrc }) => {
     const audioElem = useRef(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const [currentTime, setCurrentTime] = useState(0);
 
     const togglePlay = () => {
-        audioElem.current.volume = '0.1';
-
         if (!isPlaying) {
             audioElem.current.play();
         } else {
@@ -25,17 +27,47 @@ const Message = ({ avatar, user, text, date, isMe, isReaded, attachments, isTypi
     };
 
     useEffect(() => {
+        audioElem.current.volume = '0.1';
         audioElem.current.addEventListener('playing', () => {
             setIsPlaying(true);
         }, false);
         audioElem.current.addEventListener('ended', () => {
             setIsPlaying(false);
+            setProgress(0);
         }, false);
         audioElem.current.addEventListener('pause', () => {
             setIsPlaying(false);
         }, false);
+        audioElem.current.addEventListener('timeupdate', () => {
+            const duration = (audioElem.current && audioElem.current.duration) || 0;
+            setCurrentTime(audioElem.current.currentTime);
+            setProgress((audioElem.current.currentTime / duration) * 100);
+        });
     }, []);
 
+    return (
+        <div className="message__audio">
+            <audio ref={audioElem} src={audioSrc} preload="auto" />
+            <div
+                className="message__audio-progress"
+                style={{ width: progress + '%' }}
+            ></div>
+            <div className="message__audio-info">
+                <div className="message__audio-btn">
+                    <button onClick={togglePlay}>
+                        {isPlaying ? <img src={pauseSvg} alt="Pause Svg" /> : <img src={playSvg} alt="Play Svg" />}
+                    </button>
+                </div>
+                <div className="message__audio-wave">
+                    <img src={waveSvg} alt="Wave Svg" />
+                </div>
+                <span className="message__audio-duration">{convertCurrentTime(currentTime)}</span>
+            </div>
+        </div>
+    );
+};
+
+const Message = ({ avatar, user, text, date, isMe, isReaded, attachments, isTyping, audio }) => {
     return (
         <div className={classNames('message', {
             'message--isme': isMe,
@@ -57,25 +89,7 @@ const Message = ({ avatar, user, text, date, isMe, isReaded, attachments, isTypi
                                 <span />
                                 <span />
                             </div>)}
-                            {
-                                audio && (
-                                    <div className="message__audio">
-                                        <audio ref={audioElem} src={audio} preload="auto" />
-                                        <div className="message__audio-progress"></div>
-                                        <div className="message__audio-info">
-                                            <div className="message__audio-btn">
-                                                <button onClick={togglePlay}>
-                                                    {isPlaying ? <img src={pauseSvg} alt="Pause Svg" /> : <img src={playSvg} alt="Play Svg" />}
-                                                </button>
-                                            </div>
-                                            <div className="message__audio-wave">
-                                                <img src={waveSvg} alt="Wave Svg" />
-                                            </div>
-                                            <span className="message__audio-duration">00:19</span>
-                                        </div>
-                                    </div>
-                                )
-                            }
+                            {audio && <MessageAudio audioSrc={audio} />}
                         </div>
                     )}
 
@@ -90,48 +104,6 @@ const Message = ({ avatar, user, text, date, isMe, isReaded, attachments, isTypi
                     )
                     }
 
-                    {date && (<span className="message__date">
-                        <Time date={date} />
-                    </span>)}
-                </div>
-            </div>
-        </div>
-    );
-};
-
-
-const Message1 = ({ avatar, user, text, date, isMe, isReaded, attachments, isTyping }) => {
-    return (
-        <div className={classNames('message', {
-            'message--isme': isMe,
-            'message--is-typing': isTyping,
-            'message--image': attachments && attachments.length === 1,
-        })}>
-            <div className="message__content">
-                <MessageIconReaded isMe={isMe} isReaded={isReaded} />
-                <div className="message__avatar">
-                    <img src={avatar} alt={`Avatar ${user.fullname}`} />
-                </div>
-                <div className="message__info">
-                    {(text || isTyping) && (
-                        <div className="message__bubble">
-                            {text && <p className="message__text">{text}</p>}
-                            {isTyping && (<div className="message__typing">
-                                <span />
-                                <span />
-                                <span />
-                            </div>)}
-                        </div>
-                    )}
-                    <div className="message__attachments">
-                        {attachments &&
-                            attachments.map(item => (
-                                <div className="message__attachments-item">
-                                    <img src={item.url} alt={item.filename} />
-                                </div>
-                            ))
-                        }
-                    </div>
                     {date && (<span className="message__date">
                         <Time date={date} />
                     </span>)}

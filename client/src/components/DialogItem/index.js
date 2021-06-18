@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { isToday, format } from 'date-fns';
 
-import { MessageIconReaded } from '../index';
+import { MessageIconReaded, Avatar } from '../index';
 
 import './DialogItem.scss';
 
@@ -14,22 +14,12 @@ const getMessageTime = (createdAt) => {
     }
 }
 
-const getAvatar = (avatar) => {
-    if (avatar) {
-        return (
-            <img src={avatar} alt={`avatar`} />
-        );
-    } else {
-        //make avatar
-    }
-}
-
-const DialogItem = ({ user, text, createdAt, unreaded, isMe }) => (
+const DialogItem = ({ user, text, createdAt, unread, isMe }) => (
     <div className={classNames('dialogs__item', {
         'dialogs__item--online': user.isOnline,
     })}>
         <div className="dialogs__item-avatar">
-            {getAvatar(user.avatar)}
+            <Avatar user={user} />
         </div>
         <div className="dialogs__item-info">
             <div className="dialogs__item-info-top">
@@ -41,7 +31,7 @@ const DialogItem = ({ user, text, createdAt, unreaded, isMe }) => (
             <div className="dialogs__item-info-bottom">
                 <p>{text}</p>
                 {isMe && <MessageIconReaded isMe={true} isReaded={true} />}
-                {unreaded > 0 && <div className="dialogs__item-info-bottom-count">{unreaded > 9 ? '9+' : unreaded}</div>}
+                {unread > 0 && <div className="dialogs__item-info-bottom-count">{unread > 9 ? '9+' : unread}</div>}
             </div>
         </div>
     </div>

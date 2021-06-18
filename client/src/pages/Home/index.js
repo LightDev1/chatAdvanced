@@ -22,14 +22,14 @@ const Home = () => {
                         },
                     },
                     {
-                        id: Math.random(),
+                        id: '7e7731c54046a2e47a54854cbb9643e3',
                         text: 'Вчера Е3 смотрел, ну норм игры, сталкер выйдет, прикольно',
                         isReaded: true,
                         createdAt: new Date(),
                         user: {
-                            _id: 1,
+                            _id: '7e7731c54046a2e47a54854cbb9643e3',
                             fullname: 'Дмитрий Корпенко',
-                            avatar: 'https://man-to-man.ru/wp-content/uploads/Vnutrennij-sterzhen-e1504423397975-900x590.jpg?file_version=2'
+                            avatar: null,
                         },
                     },
                 ]}

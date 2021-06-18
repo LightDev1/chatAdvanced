@@ -9,7 +9,8 @@ const Dialogs = ({ items, userId }) => (
   <div className="dialogs">
     {orderBy(items, ['createdAt'], ['desc']).map((item) => (
       <DialogItem
-        key={item._id}
+        // key={item._id}
+        key={Math.random()}
         {...item}
         isMe={item.user._id === userId}
       />
