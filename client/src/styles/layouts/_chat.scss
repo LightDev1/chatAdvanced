@@ -1,0 +1,113 @@
+.chat {
+    display: flex;
+    height: 100%;
+    background-color: #fff;
+    width: 1140px;
+    margin: 0 auto;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.04204);
+
+    &__sidebar {
+        width: 320px;
+        border-right: 1px solid #F7F7F7;
+
+        &-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+
+            & > div {
+                i {
+                    display: inline-block;
+                    margin-right: 5px;
+                }
+            }
+        }
+
+        &-search {
+            padding: 0 20px 20px 20px;
+
+            input {
+                background-color: #F7F8F9;
+                border: 0;
+                line-height: 32px;
+                height: 34px;
+
+                &:hover, &:focus {
+                    background-color: #F7F8F9;
+                }
+            }
+
+            button {
+                height: 26px;
+                background-color: #F7F8F9;
+                border: 0;
+
+                &:hover {
+                    background-color: #F7F8F9;
+                }
+            }
+        }
+
+        &-dialogs {
+            .dialogs {
+                &__item {
+                    padding: 10px 20px;  
+                    margin-bottom: 0;
+                    cursor: pointer;
+
+                    &.active, &:hover {
+                        background-color: #f3f7ff;
+                    }
+                }
+            }
+        }
+    }
+
+    .chat__current-dialog {
+        width: 100%;
+    }
+
+    &__dialog {
+        flex: 1;
+
+        &-header {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #F7F7F7;
+
+            &-center {
+                .status {
+                    display: inline-block;
+                    position: relative;
+                    color: #bfbfbf;
+
+                    &--online {
+                        &::before {
+                            background-color: #00c980;
+                        }
+                    }
+
+                    &::before {
+                        display: block;
+                        content: '';
+                        position: absolute;
+                        top: 5px;
+                        left: -11px;
+                        width: 6px;
+                        height: 6px;
+                        border-radius: 30px;
+                        background-color: #d3d3d3;
+                    }
+                }
+            }
+            .сhat__dialog-header-username {
+                font-weight: 500;
+                display: block;
+                margin-bottom: 5px;
+            }
+        }
+    }
+}

@@ -23,7 +23,6 @@ const Avatar = ({ user }) => {
             </div>
         );
     }
-
 }
 
 Avatar.propTypes = {

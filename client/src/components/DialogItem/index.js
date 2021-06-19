@@ -4,8 +4,6 @@ import { isToday, format } from 'date-fns';
 
 import { MessageIconReaded, Avatar } from '../index';
 
-import './DialogItem.scss';
-
 const getMessageTime = (createdAt) => {
     if (isToday(createdAt)) {
         return format(createdAt, 'HH:mm');
