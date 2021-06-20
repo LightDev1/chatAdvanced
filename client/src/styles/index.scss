@@ -22,3 +22,16 @@ html,
 * {
   outline: none;
 }
+
+span.anticon {
+  color: darken(#A6A6A6, 100);
+  opacity: 0.4;
+  font-size: 20px;
+  cursor: pointer;
+  transition: opacity 0.15 ease-in-out;
+
+  &:hover {
+     cursor: pointer;
+     opacity: 1;
+  }
+}

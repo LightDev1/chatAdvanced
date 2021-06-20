@@ -13,7 +13,16 @@
         &-header {
             display: flex;
             justify-content: space-between;
-            padding: 20px;
+            padding: 21px;
+            border-bottom: 1px solid #F7F7F7;
+            height: 58px;
+            margin-bottom: 20px;
+            align-items: center;
+
+            .ant-btn-circle {
+                position: relative;
+                left: 5px;
+            }
 
             & > div {
                 i {
@@ -23,33 +32,13 @@
             }
         }
 
-        &-search {
-            padding: 0 20px 20px 20px;
-
-            input {
-                background-color: #F7F8F9;
-                border: 0;
-                line-height: 32px;
-                height: 34px;
-
-                &:hover, &:focus {
-                    background-color: #F7F8F9;
-                }
-            }
-
-            button {
-                height: 26px;
-                background-color: #F7F8F9;
-                border: 0;
-
-                &:hover {
-                    background-color: #F7F8F9;
-                }
-            }
-        }
-
         &-dialogs {
+            height: calc(100% - 136px);
+
             .dialogs {
+                height: 100%;
+                overflow: auto;
+
                 &__item {
                     padding: 10px 20px;  
                     margin-bottom: 0;
@@ -63,50 +52,50 @@
         }
     }
 
+
     .chat__current-dialog {
-        width: 100%;
+        width: 70%;
     }
 
     &__dialog {
         flex: 1;
-
+    
         &-header {
             display: flex;
             justify-content: space-between;
             text-align: center;
             align-items: center;
-            padding: 15px;
+            padding: 12px;
             border-bottom: 1px solid #F7F7F7;
 
-            &-center {
-                .status {
-                    display: inline-block;
-                    position: relative;
-                    color: #bfbfbf;
-
-                    &--online {
-                        &::before {
-                            background-color: #00c980;
-                        }
-                    }
-
-                    &::before {
-                        display: block;
-                        content: '';
-                        position: absolute;
-                        top: 5px;
-                        left: -11px;
-                        width: 6px;
-                        height: 6px;
-                        border-radius: 30px;
-                        background-color: #d3d3d3;
-                    }
+            .ant-btn-circle  {
+                span {
+                    font-size: 32px;
                 }
+            }
+
+            &-center {
+               text-align: center;
             }
             .сhat__dialog-header-username {
                 font-weight: 500;
                 display: block;
                 margin-bottom: 5px;
+            }
+        }
+
+        &-messages {
+            padding: 20px;
+            padding-bottom: 0;
+            overflow: auto;
+            height: calc(100% - 138px);
+            position: relative;
+
+            .ant-empty {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
             }
         }
     }

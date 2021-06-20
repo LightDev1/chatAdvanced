@@ -1,6 +1,31 @@
 @import "~styles/variables";
 
 .dialogs {
+   &__search {
+      padding: 2px 20px 20px 20px;
+
+      input {
+         background-color: #F7F8F9;
+         border: 0;
+         line-height: 32px;
+         height: 34px;
+
+         &:hover, &:focus {
+            background-color: #F7F8F9;
+         }
+      }
+
+         button {
+             height: 26px;
+             background-color: #F7F8F9;
+             border: 0;
+
+             &:hover {
+                 background-color: #F7F8F9;
+             }
+         }
+     }
+
    &__item {
       $item: &;
       display: flex;
