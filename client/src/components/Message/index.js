@@ -68,6 +68,7 @@ const MessageAudio = ({ audioSrc }) => {
 };
 
 const Message = ({ avatar, user, text, date, isMe, isReaded, attachments, isTyping, audio }) => {
+    console.log(date);
     return (
         <div className={classNames('message', {
             'message--isme': isMe,

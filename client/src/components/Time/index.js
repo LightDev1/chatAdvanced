@@ -1,10 +1,10 @@
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import { formatDistanceToNow } from 'date-fns';
 import { ru } from 'date-fns/locale';
 // eslint-disable-next-line
 import PropTypes from 'prop-types';
 
 const Time = ({ date }) => (
-    formatDistanceToNow(date, { addSuffix: true, locale: ru })
+    formatDistanceToNow(Date.parse(date), { addSuffix: true, locale: ru })
 );
 
 // Time.propTypes = {
