@@ -1,6 +1,7 @@
 const initialState = {
     items: [],
     currentDialogId: null,
+    isLoading: false,
 };
 
 // eslint-disable-next-line

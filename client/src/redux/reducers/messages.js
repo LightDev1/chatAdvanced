@@ -1,5 +1,6 @@
 const initialState = {
     items: null,
+    isLoading: false,
 };
 
 // eslint-disable-next-line
@@ -8,7 +9,14 @@ export default (state = initialState, { type, payload }) => {
         case 'MESSAGES:SET_ITEMS':
             return {
                 ...state,
-                items: payload
+                items: payload,
+                isLoading: false,
+            };
+
+        case 'MESSAGES:SET_IS_LOADING':
+            return {
+                ...state,
+                isLoading: payload
             };
 
         default:

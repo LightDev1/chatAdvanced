@@ -11,12 +11,32 @@
       }
    }
 
+   &__emoji-picker {
+      position: absolute;
+      bottom: 50px;
+      z-index: 1;
+   }
+
    &__actions {
       display: flex;
       align-items: center;
       width: 70px;
       justify-content: space-between;
       margin-left: 15px;
+
+      &-upload-btn {
+         cursor: pointer;
+         input {
+            cursor: pointer;
+         }
+         &:hover {
+            button {
+               span {
+                  opacity: 1;
+               }
+            }
+         }
+      }
    }
 
    input {

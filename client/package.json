@@ -5,6 +5,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
     "@babel/core": "7.12.3",
+    "@navjobs/upload": "^3.2.0",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@svgr/webpack": "5.5.0",
     "@testing-library/jest-dom": "^5.11.4",
@@ -27,6 +28,7 @@
     "date-fns": "^2.22.1",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
+    "emoji-mart": "^3.0.1",
     "eslint": "^7.11.0",
     "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-flowtype": "^5.2.0",

@@ -14,7 +14,9 @@
       display: flex;
       flex-direction: column-reverse;
 
-     img {
+     .avatar {
+      font-size: 14px;
+      line-height: 31px;
       border-radius: 50px;
       width: 33px;
       height: 33px;

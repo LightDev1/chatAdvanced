@@ -12,10 +12,11 @@ const getMessageTime = (createdAt) => {
     }
 };
 
-const DialogItem = ({ _id, user, text, createdAt, unread, isMe, onSelect }) => (
+const DialogItem = ({ _id, user, text, createdAt, unread, isMe, onSelect, currentDialogId }) => (
     <div
         className={classNames('dialogs__item', {
             'dialogs__item--online': user.isOnline,
+            'dialogs__item--selected': currentDialogId === _id,
         })}
         onClick={onSelect.bind(this, _id)}
     >

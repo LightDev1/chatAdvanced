@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { Emoji } from 'emoji-mart';
 
-import { Time, MessageIconReaded } from '../index';
+import { Time, MessageIconReaded, Avatar } from '../index';
 
 import { convertCurrentTime } from 'utils/helpers';
 
@@ -68,7 +69,6 @@ const MessageAudio = ({ audioSrc }) => {
 };
 
 const Message = ({ avatar, user, text, date, isMe, isReaded, attachments, isTyping, audio }) => {
-    console.log(date);
     return (
         <div className={classNames('message', {
             'message--isme': isMe,
@@ -79,12 +79,15 @@ const Message = ({ avatar, user, text, date, isMe, isReaded, attachments, isTypi
             <div className="message__content">
                 {isReaded && <MessageIconReaded isMe={isMe} isReaded={isReaded} />}
                 <div className="message__avatar">
-                    <img src={avatar} alt={`Avatar ${user.fullname}`} />
+                    <Avatar user={user} />
                 </div>
                 <div className="message__info">
                     {(audio || text || isTyping) && (
                         <div className="message__bubble">
-                            {text && <p className="message__text">{text}</p>}
+                            {text && <p className="message__text"><Emoji
+                                set={'apple'}
+                                emoji={'santa'}
+                                size={24} /></p>}
                             {isTyping && (<div className="message__typing">
                                 <span />
                                 <span />

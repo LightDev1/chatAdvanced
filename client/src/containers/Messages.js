@@ -1,17 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 
 import { messagesActions } from '../redux/actions';
 import { Messages as BaseMessages } from 'components';
 
-const Messages = ({ currentDialogId, fetchMessages, items }) => {
+const Messages = ({ currentDialogId, fetchMessages, items, isLoading }) => {
+    const messagesRef = useRef(null);
+
     useEffect(() => {
-        fetchMessages(currentDialogId);
+        if (currentDialogId) {
+            fetchMessages(currentDialogId);
+        }
     }, [currentDialogId, fetchMessages]);
 
+    useEffect(() => {
+        messagesRef.current.scrollTo(0, 999999);
+    }, [items]);
+
     return <BaseMessages
+        blockRef={messagesRef}
         items={items}
+        isLoading={isLoading}
     />
 };
 
-export default connect(({ messages }) => messages, messagesActions)(Messages);
+export default connect(
+    ({ dialogs, messages }) => ({
+        currentDialogId: dialogs.currentDialogId,
+        items: messages.items,
+        isLoading: messages.isLoading,
+    }),
+    messagesActions
+)(Messages);
