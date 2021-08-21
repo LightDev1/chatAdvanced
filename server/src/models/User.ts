@@ -4,12 +4,12 @@ import validator from 'validator';
 export interface UserModelInterface {
     _id?: string;
     email: string,
-    avatar: string,
+    avatar?: string,
     fullname: string,
     password: string,
     confirm_hash: string,
     confirmed?: boolean,
-    last_seen: Date,
+    last_seen?: Date,
 }
 
 const UserSchema = new Schema<UserModelInterface>({
@@ -37,7 +37,10 @@ const UserSchema = new Schema<UserModelInterface>({
     confirm_hash: {
         type: String,
     },
-    last_seen: { type: Date },
+    last_seen: {
+        type: Date,
+        default: new Date(),
+    },
 }, {
     timestamps: true
 });

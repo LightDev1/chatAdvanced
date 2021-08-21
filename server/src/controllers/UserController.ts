@@ -1,6 +1,7 @@
 import express from 'express';
 import { User } from '../models'
 import { UserModelInterface } from '../models/User';
+import { createJWToken } from '../utils';
 
 class UserController {
     show(req: express.Request, res: express.Response) {
@@ -15,8 +16,33 @@ class UserController {
         });
     }
 
-    getMe() {
-        //Потом
+    login(req: express.Request, res: express.Response) {
+        const postData = {
+            email: req.body.email,
+            password: req.body.password,
+        };
+
+        User.findOne({ email: postData.email }, (err: any, user: UserModelInterface) => {
+            if (err) {
+                return res.status(404).json({
+                    message: 'Пользователь не найден'
+                });
+            }
+
+            if (user.password === postData.password) {
+                const token = createJWToken(user);
+
+                res.json({
+                    status: 'Success',
+                    token,
+                });
+            } else {
+                res.json({
+                    status: 'error',
+                    message: 'Неверный пароль или email'
+                });
+            }
+        });
     }
 
     create(req: express.Request, res: express.Response) {

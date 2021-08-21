@@ -5,10 +5,13 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import { userCtrl, dialogCtrl, messageCtrl } from './controllers';
+import { updateLastSeen, checkAuth } from './middlewares';
 
 const app = express();
 
 app.use(express.json());
+app.use(updateLastSeen);
+app.use(checkAuth);
 
 mongoose.connect('mongodb+srv://admin:123qwe@cluster0.gihrf.mongodb.net/chatdb?retryWrites=true&w=majority', {
     useNewUrlParser: true,
@@ -20,6 +23,7 @@ mongoose.connect('mongodb+srv://admin:123qwe@cluster0.gihrf.mongodb.net/chatdb?r
 app.get('/user/:id', userCtrl.show);
 app.post('/user/registration', userCtrl.create);
 app.delete('/user/:id', userCtrl.delete);
+app.post('/user/login', userCtrl.login);
 
 app.get('/dialogs', dialogCtrl.index);
 app.delete('/dialogs/:id', dialogCtrl.delete);
