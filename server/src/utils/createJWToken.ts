@@ -17,4 +17,4 @@ export default (user: any) => {
     );
 
     return token;
-}
+};

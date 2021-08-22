@@ -1,5 +1,6 @@
 import { model, Schema } from 'mongoose';
 import validator from 'validator';
+import generatePasswordHash from '../utils/generatePasswordHash';
 
 export interface UserModelInterface {
     _id?: string;
@@ -43,6 +44,23 @@ const UserSchema = new Schema<UserModelInterface>({
     },
 }, {
     timestamps: true
+});
+
+UserSchema.pre('save', function (next) {
+    const user = this;
+
+    if (!user.isModified('password')) {
+        return next();
+    }
+
+    generatePasswordHash(user.password)
+        .then(hash => {
+            user.password = String(hash);
+            next();
+        })
+        .catch((err) => {
+            next(err);
+        });
 });
 
 const User = model<UserModelInterface>('User', UserSchema);
