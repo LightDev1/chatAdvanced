@@ -1,12 +1,12 @@
 import jwt from 'jsonwebtoken';
-import { reduce, values } from 'lodash';
+import { reduce } from 'lodash';
 
 export default (user: any) => {
     const token = jwt.sign(
         {
             data: reduce(user, (result: any, value, key) => {
                 if (key !== 'password') {
-                    result[key] = values;
+                    result[key] = value;
                 }
 
                 return result;

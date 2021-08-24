@@ -18,6 +18,18 @@ class UserController {
         });
     }
 
+    getMe(req: express.Request, res: express.Response) {
+        const id: any = req.user._id;
+        User.findById(id, (error: any, user: UserModelInterface) => {
+            if (error) {
+                return res.status(404).json({
+                    message: 'Пользователь не найден'
+                });
+            }
+            res.json(user);
+        });
+    }
+
     create(req: express.Request, res: express.Response) {
         const postData = {
             email: req.body.email,

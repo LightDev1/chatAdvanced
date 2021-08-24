@@ -4,7 +4,7 @@ import { DialogModelInterface } from '../models/Dialog';
 
 class DialogController {
     index(req: express.Request, res: express.Response) {
-        const authorId: any = '611cfd8ba821bf26706b75ae';
+        const authorId: any = req.user._id
 
         Dialog
             .find({ author: authorId })
