@@ -1,6 +1,7 @@
 import express from 'express';
 import { Message } from '../models';
 import { MessageModelInterface } from '../models/Message';
+import { io } from '../index';
 
 class MessageController {
     index(req: express.Request, res: express.Response) {
@@ -33,7 +34,7 @@ class MessageController {
     // }
 
     create(req: express.Request, res: express.Response) {
-        const userId = '60de0f1495ccb71194d1cbe9';
+        const userId = req.user._id;
 
         const postData = {
             dialog: req.body.dialog,
@@ -44,8 +45,15 @@ class MessageController {
         const message = new Message(postData);
 
         message.save().then((obj: any) => {
-            console.log('Диалог был создан');
-            res.json(obj);
+            obj.populate('dialog', (err: any, message: any) => {
+                if (err) {
+                    return res.status(500).json({
+                        message: err,
+                    });
+                }
+                res.json(obj);
+                io.emit('MESSAGES:NEW_MESSAGE', obj);
+            })
         }).catch((error: any) => {
             console.log(error);
             res.json(error);

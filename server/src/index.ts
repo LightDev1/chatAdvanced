@@ -1,20 +1,16 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import { Server } from 'socket.io';
 import { createServer } from 'http';
 
 import { dialogRoutes, messageRoutes, userRoutes } from './routes'
 import { updateLastSeen, checkAuth } from './middlewares';
+import createSocket from './core/socket';
 
 import './core/db';
 
 const app = express();
-const http = createServer(app);
-const io = new Server(http, {
-    cors: {
-        origin: "http://127.0.0.1:5500",
-    }
-});
+export const http = createServer(app);
+export const io = createSocket(http);
 
 dotenv.config();
 
@@ -25,12 +21,6 @@ app.use(checkAuth);
 app.use(userRoutes);
 app.use(dialogRoutes);
 app.use(messageRoutes);
-
-io.on("connection", socket => {
-    console.log('Пользователь подключен', socket.id);
-
-    socket.emit('test', 'You are connected to sockets');
-});
 
 const PORT = process.env.PORT || 9999;
 

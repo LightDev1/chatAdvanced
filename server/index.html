@@ -13,8 +13,10 @@
     <script>
         var socket = io('http://localhost:9999');
 
-        socket.on('test', (msg) => {
-            console.log('message: ' + msg);
+        socket.on('MESSAGES:NEW_MESSAGE', (msg) => {
+            if (window.user !== msg.user) {
+                console.log('message: ' + msg.text);
+            }
         });
 
     </script>
