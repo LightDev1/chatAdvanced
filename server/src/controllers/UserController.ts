@@ -21,7 +21,7 @@ class UserController {
     getMe(req: express.Request, res: express.Response) {
         const id: any = req.user._id;
         User.findById(id, (error: any, user: UserModelInterface) => {
-            if (error) {
+            if (error || !user) {
                 return res.status(404).json({
                     message: 'Пользователь не найден'
                 });

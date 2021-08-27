@@ -1,8 +1,9 @@
-import { Route } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Route, Redirect } from 'react-router-dom';
 
 import { Auth, Home } from 'pages';
 
-function App() {
+const App = ({ isAuth }) => {
   return (
     <div className="wrapper">
       <Route path={['/', '/login', '/register']} exact>
@@ -11,8 +12,9 @@ function App() {
       <Route path="/im" exact>
         <Home />
       </Route>
+      {isAuth ? <Redirect to="/im" /> : <Redirect to="/login" />}
     </div>
   );
 }
 
-export default App;
+export default connect(({ user }) => ({ isAuth: user.isAuth }))(App);

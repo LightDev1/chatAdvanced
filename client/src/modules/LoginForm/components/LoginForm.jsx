@@ -25,7 +25,7 @@ const LoginForm = (props) => {
         handleBlur,
         handleSubmit,
         isValid,
-        dirty,
+        isSubmitting,
     } = props;
 
     return (
@@ -75,22 +75,23 @@ const LoginForm = (props) => {
                         />
                     </Form.Item>
                     <Form.Item>
-                        {dirty && !isValid && <span>Ошибка!</span>}
+                        {isSubmitting && !isValid && <span>Ошибка!</span>}
                         <Button
                             onClick={handleSubmit}
                             size="large"
                             type="primary"
                             htmlType="submit"
+                            disabled={isSubmitting}
                         >
                             Войти в аккаунт
-                            </Button>
+                        </Button>
                     </Form.Item>
                     <Link
                         className="auth__register-link"
                         to="/register"
                     >
                         Зарегистрироваться
-                        </Link>
+                    </Link>
                 </Form>
             </Block>
         </div>
