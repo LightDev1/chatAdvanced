@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import { LoginForm, RegisterForm } from 'modules';
+import CheckEmailInfo from './components/checkEmailInfo';
 
 import './Auth.scss';
 
@@ -13,6 +14,9 @@ const Auth = () => {
                 </Route>
                 <Route path="/register" exact>
                     <RegisterForm />
+                </Route>
+                <Route path="/register/check" exact>
+                    <CheckEmailInfo />
                 </Route>
             </div>
         </section>

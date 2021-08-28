@@ -1,9 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
-import { Form, Input } from 'antd';
-import { Button, Block } from 'components';
+import { Form } from 'antd';
+import { Button, Block, FormField } from 'components';
 import { UserOutlined, LockOutlined, MailOutlined, InfoCircleTwoTone } from '@ant-design/icons';
-import { validateField } from 'utils/helpers';
 
 const RegisterForm = (props) => {
     const success = false;
@@ -16,7 +15,7 @@ const RegisterForm = (props) => {
         handleBlur,
         handleSubmit,
         isValid,
-        dirty,
+        isSubmitting,
     } = props;
 
     return (
@@ -31,72 +30,59 @@ const RegisterForm = (props) => {
                         className="login-form"
                         onSubmit={handleSubmit}
                     >
-
-                        <Form.Item
+                        <FormField
                             name="email"
-                            validateStatus={validateField('email', touched, errors)}
-                            rules={[{ required: true, message: 'Please input your E-mail!' }]}
-                            hasFeedback
-                            help={touched.email && errors.email}
-                        >
-                            <Input
-                                id="email"
-                                prefix={<MailOutlined />}
-                                placeholder="E-mail"
-                                size="large"
-                                value={values.email}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            name="username"
-                            rules={[{ required: true, message: 'Please input your Username!' }]}
-                            hasFeedback
-                        >
-                            <Input
-                                prefix={<UserOutlined className="site-form-item-icon" />}
-                                placeholder="Ваше имя"
-                                size="large"
-                                value={'fdffdffd'}
-                            />
-                        </Form.Item>
-                        <Form.Item
+                            touched={touched}
+                            errors={errors}
+                            icon={<MailOutlined />}
+                            placeholder="E-mail"
+                            values={values}
+                            handleChange={handleChange}
+                            handleBlur={handleBlur}
+                        />
+
+                        <FormField
+                            name="fullname"
+                            touched={touched}
+                            errors={errors}
+                            icon={<UserOutlined className="site-form-item-icon" />}
+                            placeholder="Ваше имя"
+                            values={values}
+                            handleChange={handleChange}
+                            handleBlur={handleBlur}
+                        />
+
+                        <FormField
                             name="password"
-                            rules={[{ required: true, message: 'Please input your Password!' }]}
-                            validateStatus={validateField('password', touched, errors)}
-                            help={touched.password && errors.password}
-                        >
-                            <Input
-                                id='password'
-                                prefix={<LockOutlined className="site-form-item-icon" />}
-                                type="password"
-                                size="large"
-                                placeholder="Пароль"
-                                value={values.password}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                            />
-                        </Form.Item>
-                        <Form.Item
+                            touched={touched}
+                            errors={errors}
+                            icon={<LockOutlined className="site-form-item-icon" />}
+                            placeholder="Пароль"
+                            values={values}
+                            type="password"
+                            handleChange={handleChange}
+                            handleBlur={handleBlur}
+                        />
+
+                        <FormField
                             name="password2"
-                            validateStatus={validateField('email', touched, errors)}
-                            rules={[{ required: true, message: 'Please input your Password!' }]}
-                        >
-                            <Input
-                                prefix={<LockOutlined className="site-form-item-icon" />}
-                                type="password2"
-                                size="large"
-                                placeholder="Повторить пароль"
-                            />
-                        </Form.Item>
+                            touched={touched}
+                            errors={errors}
+                            icon={<LockOutlined className="site-form-item-icon" />}
+                            placeholder="Повторить пароль"
+                            values={values}
+                            type="password"
+                            handleChange={handleChange}
+                            handleBlur={handleBlur}
+                        />
                         <Form.Item>
-                            {dirty && !isValid && <span>Ошибка!</span>}
+                            {isSubmitting && !isValid && <span>Ошибка!</span>}
                             <Button
                                 onClick={handleSubmit}
                                 size="large"
                                 type="primary"
                                 htmlType="submit"
+                                disabled={isSubmitting}
                             >
                                 Зарегистрироваться
                             </Button>

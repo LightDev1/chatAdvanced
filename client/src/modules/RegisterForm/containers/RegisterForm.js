@@ -1,6 +1,9 @@
 import { withFormik } from 'formik';
+
 import RegisterForm from '../components/RegisterForm';
 import validateForm from 'utils/validate';
+import { userActions } from 'redux/actions';
+import store from 'redux/store';
 
 export default withFormik({
     enableReinitialize: true,
@@ -19,10 +22,11 @@ export default withFormik({
     },
 
     handleSubmit: (values, { setSubmitting }) => {
-        setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
+        store.dispatch(userActions.fetchUserRegister(values)).then(() => {
             setSubmitting(false);
-        }, 1000);
+        }).catch(() => {
+            setSubmitting(false);
+        });
     },
 
     displayName: 'RegisterForm',

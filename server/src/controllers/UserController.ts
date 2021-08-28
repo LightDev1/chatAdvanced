@@ -35,8 +35,13 @@ class UserController {
             email: req.body.email,
             fullname: req.body.fullname,
             password: req.body.password,
-            confirmed_hash: '23ev3kvk4k43kv3kv',
         };
+
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(422).json({ errors: errors.array() });
+        }
 
         const user = new User(postData);
 
@@ -44,8 +49,10 @@ class UserController {
             console.log('Пользователь был создан');
             res.json(obj);
         }).catch((error: any) => {
-            console.log(error);
-            res.json(error);
+            res.status(500).json({
+                status: 'error',
+                message: error,
+            });
         });
     }
 
