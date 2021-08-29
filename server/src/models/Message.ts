@@ -1,6 +1,7 @@
 import { model, Schema, Types } from 'mongoose';
 
 export interface MessageModelInterface {
+    _id?: string;
     author: {
         type: Types.ObjectId,
         ref: string,

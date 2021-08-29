@@ -15,8 +15,8 @@ export const io = createSocket(http);
 dotenv.config();
 
 app.use(express.json());
-app.use(updateLastSeen);
 app.use(checkAuth);
+app.use(updateLastSeen);
 
 app.use(userRoutes);
 app.use(dialogRoutes);

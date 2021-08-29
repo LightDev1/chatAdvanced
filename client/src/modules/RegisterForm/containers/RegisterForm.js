@@ -21,8 +21,9 @@ export default withFormik({
         return errors;
     },
 
-    handleSubmit: (values, { setSubmitting }) => {
+    handleSubmit: (values, { setSubmitting, props }) => {
         store.dispatch(userActions.fetchUserRegister(values)).then(() => {
+            props.history.push('/user/verify');
             setSubmitting(false);
         }).catch(() => {
             setSubmitting(false);

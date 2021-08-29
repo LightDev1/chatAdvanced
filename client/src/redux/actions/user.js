@@ -6,7 +6,7 @@ const actions = {
         type: 'USER:SET_DATA',
         payload: data
     }),
-    fetchUserData: (data) => dispatch => {
+    fetchUserData: () => dispatch => {
         userApi.getMe().then(({ data }) => {
             dispatch(actions.setUserData(data));
         });
@@ -35,7 +35,7 @@ const actions = {
     },
     fetchUserRegister: (postData) => dispatch => {
         return userApi.register(postData).then(({ data }) => {
-            const { status, token } = data;
+            const { status } = data;
             if (status === 'error') {
                 openNotification({
                     title: 'Ошибка при регистрации',
@@ -48,9 +48,6 @@ const actions = {
                     text: 'Регитрация прошла успешно',
                     type: 'success'
                 });
-                window.axios.defaults.headers.common['token'] = token;
-                window.localStorage['token'] = token;
-                dispatch(actions.fetchUserData());
             }
         });
     }

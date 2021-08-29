@@ -1,6 +1,7 @@
 import { model, Schema } from 'mongoose';
 import validator from 'validator';
 import generatePasswordHash from '../utils/generatePasswordHash';
+import { differenceInMinutes } from 'date-fns';
 
 export interface UserModelInterface {
     _id?: string;
@@ -46,6 +47,14 @@ const UserSchema = new Schema<UserModelInterface>({
     timestamps: true
 });
 
+UserSchema.virtual('isOnline').get(function (this: any) {
+    return differenceInMinutes(new Date(), this.last_seen) < 5;
+});
+
+UserSchema.set('toJSON', {
+    virtuals: true
+});
+
 UserSchema.pre('save', function (next) {
     const user = this;
 
@@ -56,7 +65,10 @@ UserSchema.pre('save', function (next) {
     generatePasswordHash(user.password)
         .then(hash => {
             user.password = String(hash);
-            next();
+            generatePasswordHash(String(Date())).then((hash) => {
+                user.confirm_hash = String(hash);
+                next();
+            })
         })
         .catch((err) => {
             next(err);

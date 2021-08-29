@@ -3,11 +3,9 @@ import { User } from '../models';
 
 export default (req: express.Request, res: express.Response, next: express.NextFunction) => {
     User.findOneAndUpdate(
-        { _id: '611cfd8ba821bf26706b75ae', },
+        { _id: req.user._id, },
         {
-            $set: {
-                last_seen: new Date()
-            }
+            last_seen: new Date()
         },
         { new: true },
         () => { }

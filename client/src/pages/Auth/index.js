@@ -15,8 +15,8 @@ const Auth = () => {
                 <Route path="/register" exact>
                     <RegisterForm />
                 </Route>
-                <Route path="/register/check" exact>
-                    <CheckEmailInfo />
+                <Route path="/register/verify" render={(props) => <CheckEmailInfo {...props} />} exact>
+
                 </Route>
             </div>
         </section>

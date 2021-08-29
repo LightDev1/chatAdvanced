@@ -8,7 +8,13 @@ class DialogController {
 
         Dialog
             .find({ author: authorId })
-            .populate(['author', 'partner'])
+            .populate(['author', 'partner', 'lastMessage'])
+            .populate({
+                path: 'lastMessage',
+                populate: {
+                    path: 'user',
+                }
+            })
             .exec((error, dialogs: DialogModelInterface[]) => {
                 if (error) {
                     return res.status(404).json({

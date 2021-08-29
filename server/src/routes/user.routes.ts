@@ -5,9 +5,10 @@ import { loginValidation, registerValidation } from '../utils/validators';
 const router = Router();
 
 router.get('/user/me', userCtrl.getMe);
-router.get('/user/:id', userCtrl.show);
+router.get('/user/verify', userCtrl.verify);
 router.post('/user/registration', registerValidation, userCtrl.create);
-router.delete('/user/:id', userCtrl.delete);
 router.post('/user/login', loginValidation, userCtrl.login);
+router.delete('/user/:id', userCtrl.delete);
+router.get('/user/:id', userCtrl.show);
 
 export default router;

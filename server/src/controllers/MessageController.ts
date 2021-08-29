@@ -1,5 +1,5 @@
 import express from 'express';
-import { Message } from '../models';
+import { Message, Dialog } from '../models';
 import { MessageModelInterface } from '../models/Message';
 import { io } from '../index';
 
@@ -48,9 +48,24 @@ class MessageController {
             obj.populate('dialog', (err: any, message: any) => {
                 if (err) {
                     return res.status(500).json({
+                        status: 'error',
                         message: err,
                     });
                 }
+
+                Dialog.findOneAndUpdate(
+                    { _id: postData.dialog },
+                    { lastMessage: message._id },
+                    { upsert: true },
+                    (err,) => {
+                        if (err) {
+                            return res.status(500).json({
+                                status: 'error',
+                                message: err,
+                            });
+                        }
+                    });
+
                 res.json(obj);
                 io.emit('MESSAGES:NEW_MESSAGE', obj);
             })

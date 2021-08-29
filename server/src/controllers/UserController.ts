@@ -56,6 +56,38 @@ class UserController {
         });
     }
 
+    async verify(req: express.Request, res: express.Response) {
+        try {
+            const hash: any = req.query.hash;
+
+            if (!hash) {
+                return res.status(422).json({ errors: 'Неверный хэш' });
+            }
+
+            const user = await User.findOne({ confirm_hash: hash });
+
+            if (!user) {
+                return res.status(404).json({
+                    message: 'Хэш не найден'
+                });
+            }
+
+            await User.findOneAndUpdate({ _id: user._id }, { confirmed: true });
+
+            await user.save();
+
+            res.json({
+                status: 'success',
+                message: 'Аккаунт успешно подвержден!'
+            })
+        } catch (err) {
+            res.status(403).json({
+                status: 'error',
+                message: err,
+            })
+        }
+    }
+
     async login(req: express.Request, res: express.Response) {
         try {
             const postData = {

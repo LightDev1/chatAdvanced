@@ -10,27 +10,19 @@ const App = ({ isAuth }) => {
         <Route path="/im" exact>
           <Home />
         </Route>
-        <Redirect path="/im" />
+        <Redirect to="/im" />
       </Switch>
     )
   };
 
   return (
     <Switch>
-      <Route path={['/', '/login', '/register', '/register/check']} exact>
+      <Route path={['/', '/login', '/register', '/register/verify']} exact>
         < Auth />
       </Route>
-      <Redirect path="/login" />
+      <Redirect to="/login" />
     </Switch>
   );
 }
-
-{/* <Route path={['/', '/login', '/register', '/register/check']} exact>
-< Auth />
-</Route>
-<Route path="/im" exact>
-<Home />
-</Route>
-{ isAuth ? <Redirect to="/im" /> : <Redirect to="/login" /> } */}
 
 export default connect(({ user }) => ({ isAuth: user.isAuth }))(App);
