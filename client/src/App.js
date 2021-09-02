@@ -10,9 +10,12 @@ const App = ({ isAuth }) => {
         <Route path="/im" exact>
           <Home />
         </Route>
+        <Route path="/dialogs/:id">
+          <Home />
+        </Route>
         <Redirect to="/im" />
       </Switch>
-    )
+    );
   };
 
   return (

@@ -104,8 +104,9 @@ class UserController {
             const user = await User.findOne({ email: postData.email });
 
             if (!user) {
-                return res.status(404).json({
-                    message: 'Пользователь не найден'
+                return res.status(403).json({
+                    status: 'error',
+                    message: 'Неверный пароль или email'
                 });
             }
 

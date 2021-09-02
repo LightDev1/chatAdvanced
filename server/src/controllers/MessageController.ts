@@ -9,7 +9,7 @@ class MessageController {
 
         Message
             .find({ dialog: dialogId })
-            .populate(['dialog'])
+            .populate(['dialog', 'user'])
             .exec((error, messages: MessageModelInterface[]) => {
                 if (error) {
                     return res.status(404).json({
@@ -45,7 +45,7 @@ class MessageController {
         const message = new Message(postData);
 
         message.save().then((obj: any) => {
-            obj.populate('dialog', (err: any, message: any) => {
+            obj.populate(['dialog', 'user'], (err: any, message: any) => {
                 if (err) {
                     return res.status(500).json({
                         status: 'error',
@@ -66,7 +66,7 @@ class MessageController {
                         }
                     });
 
-                res.json(obj);
+                res.json(message);
                 io.emit('MESSAGES:NEW_MESSAGE', obj);
             })
         }).catch((error: any) => {

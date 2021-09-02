@@ -84,10 +84,7 @@ const Message = ({ avatar, user, text, date, isMe, isReaded, attachments, isTypi
                 <div className="message__info">
                     {(audio || text || isTyping) && (
                         <div className="message__bubble">
-                            {text && <p className="message__text"><Emoji
-                                set={'apple'}
-                                emoji={'santa'}
-                                size={24} /></p>}
+                            {text && <p className="message__text">{text}</p>}
                             {isTyping && (<div className="message__typing">
                                 <span />
                                 <span />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
+import socket from 'core/socket';
 import { dialogActions } from '../redux/actions';
 import { Dialogs as BaseDialogs } from 'components';
 
@@ -12,10 +13,21 @@ const Dialogs = ({ fetchDialogs, currentDialogId, setCurrentDialogId, items, use
         const value = event.target.value;
 
         setFiltered(
-            items.filter(dialog => dialog.user.fullname.toLowerCase().indexOf(value.toLowerCase()) >= 0)
+            items.filter(dialog =>
+                dialog.author.fullname.toLowerCase().indexOf(value.toLowerCase()) >= 0 ||
+                dialog.partner.fullname.toLowerCase().indexOf(value.toLowerCase()) >= 0
+            )
         );
         setSearchValue(value);
     };
+
+    const onNewDialog = () => {
+        fetchDialogs();
+    }
+
+    useEffect(() => {
+        setFiltered(items);
+    }, [items]);
 
     useEffect(() => {
         if (!items.length) {
@@ -23,15 +35,22 @@ const Dialogs = ({ fetchDialogs, currentDialogId, setCurrentDialogId, items, use
         } else {
             setFiltered(items);
         }
-    }, [fetchDialogs, items]);
+
+        socket.on('SERVER:DIALOG_CREATED', onNewDialog);
+
+        return () => {
+            socket.remove('SERVER:DIALOG_CREATED', onNewDialog);
+        };
+        // eslint-disable-next-line
+    }, []);
 
     return <BaseDialogs
         userId={userId}
         items={filtered}
         onSearch={onChangeInput}
         inputValue={searchValue}
-        onSelectDialog={setCurrentDialogId}
         currentDialogId={currentDialogId}
+        onSelectDialog={setCurrentDialogId}
     />
 };
 

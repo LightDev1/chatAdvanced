@@ -7,7 +7,7 @@ import { Message } from 'components';
 
 import './Messages.scss';
 
-const Messages = ({ blockRef, isLoading, items }) => {
+const Messages = ({ blockRef, isLoading, items, user }) => {
     return (
         <div
             ref={blockRef}
@@ -22,7 +22,7 @@ const Messages = ({ blockRef, isLoading, items }) => {
                     />
                 ) : items && !isLoading ? (
                     items.length > 0 ? items.map((item) => (
-                        <Message key={item._id} {...item} />
+                        <Message key={item._id} {...item} isMe={user._id === item.user._id} />
                     )) : <Empty description="Нет сообщений" />
                 ) : <Empty description="Выберите диалог" />
             }

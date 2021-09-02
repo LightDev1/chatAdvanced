@@ -6,6 +6,22 @@ const actions = {
         payload: items
     }),
 
+    addMessage: message => (dispatch, getState) => {
+        const { dialogs } = getState();
+        const { currentDialogId } = dialogs;
+
+        if (currentDialogId === message.dialog._id) {
+            dispatch({
+                type: "MESSAGES:ADD_MESSAGE",
+                payload: message
+            });
+        }
+    },
+
+    fetchSendMessage: (text, dialog) => dispatch => {
+        messagesApi.send(text, dialog);
+    },
+
     setIsLoading: bool => ({
         type: 'MESSAGES:SET_IS_LOADING',
         payload: bool,

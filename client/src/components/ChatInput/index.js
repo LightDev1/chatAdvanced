@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Input, Button } from 'antd';
 import { SmileOutlined, CameraOutlined, AudioOutlined, SendOutlined } from '@ant-design/icons';
@@ -7,12 +8,19 @@ import { UploadField } from '@navjobs/upload'
 
 import './ChatInput.scss';
 
-const ChatInput = () => {
+const ChatInput = ({ onSendMessage, currentDialogId }) => {
     const [value, setValue] = useState('');
     const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
 
     const toggleEmojiPicker = () => {
         setEmojiPickerVisible(!emojiPickerVisible);
+    };
+
+    const handleSendMessage = (event) => {
+        if (event.key === 'Enter') {
+            onSendMessage(value, currentDialogId);
+            setValue('');
+        }
     };
 
     return (
@@ -30,8 +38,10 @@ const ChatInput = () => {
             </div>
             <Input
                 onChange={(event) => { setValue(event.target.value) }}
+                onKeyUp={handleSendMessage}
                 placeholder="Введите текст сообщения…"
                 size="large"
+                value={value}
             />
             <div className="chat-input__actions">
                 <UploadField
