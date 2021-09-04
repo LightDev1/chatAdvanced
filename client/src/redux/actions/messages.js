@@ -18,6 +18,18 @@ const actions = {
         }
     },
 
+    removeMessageById: (id) => dispatch => {
+        dispatch(actions.setIsLoading(true));
+        messagesApi.removeById(id).then(({ data }) => {
+            dispatch({
+                type: 'MESSAGES:REMOVE_MESSAGE',
+                payload: id,
+            });
+        }).catch(() => {
+            dispatch(actions.setIsLoading(false));
+        });
+    },
+
     fetchSendMessage: (text, dialog) => dispatch => {
         messagesApi.send(text, dialog);
     },
@@ -33,7 +45,7 @@ const actions = {
             dispatch(actions.setMessages(data));
         }).catch(() => {
             dispatch(actions.setIsLoading(false));
-        })
+        });
     }
 };
 

@@ -6,14 +6,23 @@ const actions = {
         type: 'USER:SET_DATA',
         payload: data
     }),
+    setIsAuth: bool => ({
+        type: 'USER:SET_IS_AUTH',
+        payload: bool
+    }),
     fetchUserData: () => dispatch => {
         userApi.getMe().then(({ data }) => {
             dispatch(actions.setUserData(data));
+        }).catch((err) => {
+            if (err.response.status === 403) {
+                dispatch(actions.setIsAuth(false));
+                delete window.localStorage.token;
+            }
         });
     },
     fetchUserLogin: (postData) => dispatch => {
         return userApi.login(postData).then(({ data }) => {
-            const { status, token } = data;
+            const { token } = data;
             openNotification({
                 title: 'Отлично!',
                 text: 'Вы успешно авторизавались',

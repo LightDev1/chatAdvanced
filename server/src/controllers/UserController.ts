@@ -30,6 +30,20 @@ class UserController {
         });
     }
 
+    findUsers(req: express.Request, res: express.Response) {
+        const query: any = req.query.query;
+        User.find()
+            .or([{ fullname: new RegExp(query, 'i') }, { email: new RegExp(query, 'i') }])
+            .then(users => res.json(users))
+            .catch(err => {
+                return res.status(404).json({
+                    status: 'error',
+                    message: err,
+                });
+            });
+    }
+
+
     create(req: express.Request, res: express.Response) {
         const postData = {
             email: req.body.email,

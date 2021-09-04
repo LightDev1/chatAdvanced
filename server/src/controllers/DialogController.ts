@@ -55,7 +55,7 @@ class DialogController {
             const message = new Message({
                 dialog: dialogObj._id,
                 text: req.body.text,
-                user: req.body.author,
+                user: req.user._id,
             });
 
             message.save().then(() => {
