@@ -1,12 +1,14 @@
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input, Button } from 'antd';
 import { SmileOutlined, CameraOutlined, AudioOutlined, SendOutlined } from '@ant-design/icons';
 import { Picker } from 'emoji-mart';
+import { UploadField } from '@navjobs/upload';
 
-import { UploadField } from '@navjobs/upload'
+import { useOutside } from 'utils/helpers';
 
 import './ChatInput.scss';
+
+const { TextArea } = Input;
 
 const ChatInput = ({ onSendMessage, currentDialogId }) => {
     const [value, setValue] = useState('');
@@ -23,12 +25,36 @@ const ChatInput = ({ onSendMessage, currentDialogId }) => {
         }
     };
 
+    const addEmoji = ({ colons }) => {
+        setValue((value + ' ' + colons).trim());
+    };
+
+    const handleOutsideClick = (el, event) => {
+
+        if (el && !el.contains(event.target)) {
+            setEmojiPickerVisible(false);
+        }
+    };
+
+    useEffect(() => {
+        const element = document.querySelector('.chat-input__smile-btn');
+
+        document.addEventListener('click', handleOutsideClick.bind(this, element));
+
+        return () => {
+            document.removeEventListener('click', handleOutsideClick.bind(this, element));
+        };
+    }, []);
+
     return (
         <div className="chat-input">
             <div className="chat-input__smile-btn">
-                {emojiPickerVisible && <div className="chat-input__emoji-picker">
-                    <Picker set='apple' />
-                </div>}
+                <div className="chat-input__emoji-picker">{emojiPickerVisible && (
+                    <Picker
+                        set='apple'
+                        onSelect={(emojiTag => addEmoji(emojiTag))}
+                    />)}
+                </div>
                 <Button
                     type="link"
                     shape="circle"
@@ -36,12 +62,13 @@ const ChatInput = ({ onSendMessage, currentDialogId }) => {
                     onClick={toggleEmojiPicker}
                 />
             </div>
-            <Input
+            <TextArea
                 onChange={(event) => { setValue(event.target.value) }}
                 onKeyUp={handleSendMessage}
                 placeholder="Введите текст сообщения…"
                 size="large"
                 value={value}
+                autoSize={{ minRows: 1, maxRows: 6 }}
             />
             <div className="chat-input__actions">
                 <UploadField

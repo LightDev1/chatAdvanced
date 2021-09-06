@@ -1,3 +1,4 @@
+import confirm from 'antd/lib/modal/confirm';
 import { messagesApi } from 'utils/api';
 
 const actions = {
@@ -19,15 +20,18 @@ const actions = {
     },
 
     removeMessageById: (id) => dispatch => {
-        dispatch(actions.setIsLoading(true));
-        messagesApi.removeById(id).then(({ data }) => {
-            dispatch({
-                type: 'MESSAGES:REMOVE_MESSAGE',
-                payload: id,
+        if (confirm('Удалить сообщение?')) {
+            dispatch(actions.setIsLoading(true));
+            messagesApi.removeById(id).then(({ data }) => {
+                dispatch({
+                    type: 'MESSAGES:REMOVE_MESSAGE',
+                    payload: id,
+                });
+            }).catch(() => {
+                dispatch(actions.setIsLoading(false));
             });
-        }).catch(() => {
             dispatch(actions.setIsLoading(false));
-        });
+        }
     },
 
     fetchSendMessage: (text, dialog) => dispatch => {

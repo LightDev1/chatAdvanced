@@ -1,7 +1,7 @@
 import express from 'express';
 import { Message, Dialog } from '../models';
-import { MessageModelInterface } from '../models/Message';
 import { io } from '../index';
+import { MessageModelInterface } from '../models/Message';
 
 class MessageController {
     index(req: express.Request, res: express.Response) {
@@ -76,18 +76,53 @@ class MessageController {
     }
 
     delete(req: express.Request, res: express.Response) {
-        const id: string = req.params.id;
-        Message.findOneAndRemove({ _id: id })
-            .then((message) => {
-                if (!message) {
-                    return res.status(404).json({
-                        message: 'Сообщение не найдено'
+        const id = req.query.id;
+        const userId = req.user._id;
+
+        console.log(id);
+        Message.findById(id, (error: any, message: any) => {
+            if (error || !message) {
+                return res.status(404).json({
+                    status: 'error',
+                    message: 'Сообщение не найдено'
+                });
+            }
+
+            if (message.user.toString() === userId) {
+                Message.findOne({ dialog: message.dialog }, {}, { sort: { 'created_at': -1 } }, (err, lastMessage) => {
+                    if (err) {
+                        return res.status(500).json({
+                            status: 'error',
+                            message: err,
+                        });
+                    }
+
+
+                    Dialog.findById(message.dialog, (err: any, dialog: any) => {
+                        if (err) {
+                            return res.status(404).json({
+                                status: 'error',
+                                message: err,
+                            });
+                        }
+
+                        dialog.lastMessage = lastMessage;
+                        dialog.save();
                     });
-                }
-                res.json({ message: `Сообщение было удалено` });
-            }).catch((e: any) => {
-                res.status(500).json(e);
-            });
+                });
+
+                message.remove();
+                return res.json({
+                    status: 'success',
+                    message: 'Сообщение удалено'
+                });
+            } else {
+                return res.status(403).json({
+                    status: 'error',
+                    message: 'Нет прав на это действие'
+                });
+            }
+        });
     }
 }
 

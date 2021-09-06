@@ -7,7 +7,7 @@ import { Message } from 'components';
 
 import './Messages.scss';
 
-const Messages = ({ blockRef, isLoading, items, user }) => {
+const Messages = ({ blockRef, isLoading, items, user, onRemoveMessage }) => {
     return (
         <div
             ref={blockRef}

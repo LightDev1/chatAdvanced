@@ -16,10 +16,11 @@ export default (state = initialState, { type, payload }) => {
         case 'DIALOGS:SET_CURRENT_DIALOG_ID':
             return {
                 ...state,
-                currentDialogId: payload
+                currentDialogId: payload,
             };
 
         default:
             return state;
     }
 };
+

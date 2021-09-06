@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 import socket from 'core/socket';
 import { dialogActions } from '../redux/actions';
 import { Dialogs as BaseDialogs } from 'components';
+import { useHistory } from 'react-router';
 
 const Dialogs = ({ fetchDialogs, currentDialogId, setCurrentDialogId, items, userId }) => {
     const [searchValue, setSearchValue] = useState('');
     const [filtered, setFiltered] = useState(Array.from(items));
+    const history = useHistory();
 
     const onChangeInput = (event) => {
         const value = event.target.value;
@@ -32,14 +34,17 @@ const Dialogs = ({ fetchDialogs, currentDialogId, setCurrentDialogId, items, use
     useEffect(() => {
         if (!items.length) {
             fetchDialogs();
+            history.push('/im');
         } else {
             setFiltered(items);
         }
 
         socket.on('SERVER:DIALOG_CREATED', onNewDialog);
+        socket.on('MESSAGES:NEW_MESSAGE', onNewDialog);
 
         return () => {
-            socket.remove('SERVER:DIALOG_CREATED', onNewDialog);
+            socket.removeListener('SERVER:DIALOG_CREATED', onNewDialog);
+            socket.removeListener('MESSAGES:NEW_MESSAGE', onNewDialog);
         };
         // eslint-disable-next-line
     }, []);
