@@ -7,13 +7,13 @@ const App = ({ isAuth }) => {
   if (isAuth) {
     return (
       <Switch>
-        <Route path="/im" exact>
+        <Route path="/" exact>
           <Home />
         </Route>
         <Route path="/dialogs/:id">
           <Home />
         </Route>
-        <Redirect to="/im" />
+        <Redirect to="/" />
       </Switch>
     );
   };

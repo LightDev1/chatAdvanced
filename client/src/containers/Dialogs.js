@@ -6,7 +6,7 @@ import { dialogActions } from '../redux/actions';
 import { Dialogs as BaseDialogs } from 'components';
 import { useHistory } from 'react-router';
 
-const Dialogs = ({ fetchDialogs, currentDialogId, setCurrentDialogId, items, userId }) => {
+const Dialogs = ({ fetchDialogs, currentDialogId, items, userId }) => {
     const [searchValue, setSearchValue] = useState('');
     const [filtered, setFiltered] = useState(Array.from(items));
     const history = useHistory();
@@ -34,7 +34,7 @@ const Dialogs = ({ fetchDialogs, currentDialogId, setCurrentDialogId, items, use
     useEffect(() => {
         if (!items.length) {
             fetchDialogs();
-            history.push('/im');
+            history.push('/');
         } else {
             setFiltered(items);
         }
@@ -55,7 +55,6 @@ const Dialogs = ({ fetchDialogs, currentDialogId, setCurrentDialogId, items, use
         onSearch={onChangeInput}
         inputValue={searchValue}
         currentDialogId={currentDialogId}
-        onSelectDialog={setCurrentDialogId}
     />
 };
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
+import { Empty } from 'antd';
 
 import socket from 'core/socket';
 import { messagesActions } from '../redux/actions';
@@ -10,7 +11,7 @@ const Messages = ({ currentDialogId, user, fetchMessages, addMessage, items, isL
 
     const onNewMessage = (data) => {
         addMessage(data);
-    }
+    };
 
     useEffect(() => {
         if (currentDialogId) {
@@ -26,8 +27,15 @@ const Messages = ({ currentDialogId, user, fetchMessages, addMessage, items, isL
     }, [currentDialogId, fetchMessages]);
 
     useEffect(() => {
+        if (!currentDialogId) {
+            return;
+        }
         messagesRef.current.scrollTo(0, 999999);
     }, [items]);
+
+    if (!currentDialogId) {
+        return <Empty description="Выберите диалог" />;
+    }
 
     return <BaseMessages
         user={user}
@@ -35,7 +43,7 @@ const Messages = ({ currentDialogId, user, fetchMessages, addMessage, items, isL
         items={items}
         isLoading={isLoading}
         onRemoveMessage={removeMessageById}
-    />
+    />;
 };
 
 export default connect(

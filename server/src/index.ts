@@ -1,8 +1,10 @@
-import express from 'express';
 import dotenv from 'dotenv';
+dotenv.config();
+
+import express from 'express';
 import { createServer } from 'http';
 
-import { dialogRoutes, messageRoutes, userRoutes } from './routes'
+import { dialogRoutes, messageRoutes, userRoutes, fileRoutes } from './routes'
 import { updateLastSeen, checkAuth } from './middlewares';
 import createSocket from './core/socket';
 
@@ -12,8 +14,6 @@ const app = express();
 export const http = createServer(app);
 export const io = createSocket(http);
 
-dotenv.config();
-
 app.use(express.json());
 app.use(checkAuth);
 app.use(updateLastSeen);
@@ -21,6 +21,7 @@ app.use(updateLastSeen);
 app.use(userRoutes);
 app.use(dialogRoutes);
 app.use(messageRoutes);
+app.use(fileRoutes);
 
 const PORT = process.env.PORT || 9999;
 

@@ -21,7 +21,7 @@ export interface MessageModelInterface {
         type: string,
         required: boolean,
     };
-    unread: {
+    read: {
         type: boolean,
         default: boolean,
     },
@@ -42,12 +42,19 @@ const MessageSchema = new Schema<MessageModelInterface>({
         ref: 'User',
         required: true,
     },
-    unread: {
+    read: {
         type: Boolean,
         default: false,
     },
+    attachments: [
+        {
+            type: Types.ObjectId,
+            ref: 'UploadedFile',
+        }
+    ],
 }, {
-    timestamps: true
+    timestamps: true,
+    usePushEach: true,
 });
 
 const Message = model<MessageModelInterface>('Message', MessageSchema);

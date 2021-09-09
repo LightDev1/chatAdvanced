@@ -71,16 +71,16 @@ const MessageAudio = ({ audioSrc }) => {
     );
 };
 
-const Message = ({ avatar, user, text, date, isMe, isReaded, attachments, isTyping, audio, onRemoveMessage }) => {
+const Message = ({ read, user, text, date, isMe, attachments, isTyping, audio, onRemoveMessage }) => {
     return (
         <div className={classNames('message', {
             'message--isme': isMe,
             'message--is-typing': isTyping,
             'message--is-audio': audio,
-            'message--image': attachments && attachments.length === 1,
+            'message--image': attachments && attachments.length === 1 && !text,
         })}>
             <div className="message__content">
-                {isReaded && <MessageIconReaded isMe={isMe} isReaded={isReaded} />}
+                <MessageIconReaded isMe={isMe} isReaded={read} />
                 <Popover
                     title="Title"
                     trigger="click"

@@ -6,10 +6,26 @@ import { MessageModelInterface } from '../models/Message';
 class MessageController {
     index(req: express.Request, res: express.Response) {
         const dialogId: any = req.query.dialog;
+        const userId: any = req.user._id;
+
+        Message.updateMany(
+            { 'dialog': dialogId, 'user': { $ne: userId } },
+            // @ts-ignore
+            { $set: { 'read': true } },
+            (err: any) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(500).json({
+                        status: "error",
+                        message: err
+                    });
+                }
+            }
+        );
 
         Message
             .find({ dialog: dialogId })
-            .populate(['dialog', 'user'])
+            .populate(['dialog', 'user', 'attachments'])
             .exec((error, messages: MessageModelInterface[]) => {
                 if (error) {
                     return res.status(404).json({
@@ -40,12 +56,13 @@ class MessageController {
             dialog: req.body.dialog,
             text: req.body.text,
             user: userId,
+            attachments: req.body.attachments,
         };
 
         const message = new Message(postData);
 
         message.save().then((obj: any) => {
-            obj.populate(['dialog', 'user'], (err: any, message: any) => {
+            obj.populate(['dialog', 'user', 'attachments'], (err: any, message: any) => {
                 if (err) {
                     return res.status(500).json({
                         status: 'error',

@@ -24,6 +24,7 @@ class DialogController {
                         message: 'Диалог не найден'
                     });
                 }
+
                 return res.json(dialogs);
             });
     }
@@ -72,13 +73,14 @@ class DialogController {
                     });
                 });
             }).catch((error: any) => {
-                console.log(error);
                 res.json(error);
             });
 
-        }).catch((error: any) => {
-            console.log(error);
-            res.json(error);
+        }).catch((err: any) => {
+            res.json({
+                status: 'error',
+                message: err,
+            });
         });
     }
 

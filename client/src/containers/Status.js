@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Status as BaseStatus } from 'components'
+import { Status as BaseStatus } from 'components';
 
 const Status = ({ currentDialogId, dialogs, user }) => {
     if (!dialogs.length || !currentDialogId) {
