@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Input, Button } from 'antd';
 import { SmileOutlined, CameraOutlined, AudioOutlined, SendOutlined } from '@ant-design/icons';
 import { Picker } from 'emoji-mart';
@@ -9,42 +9,7 @@ import './ChatInput.scss';
 
 const { TextArea } = Input;
 
-const ChatInput = ({ onSendMessage, currentDialogId }) => {
-    const [value, setValue] = useState('');
-    const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
-
-    const toggleEmojiPicker = () => {
-        setEmojiPickerVisible(!emojiPickerVisible);
-    };
-
-    const handleSendMessage = (event) => {
-        if (event.key === 'Enter') {
-            onSendMessage(value, currentDialogId);
-            setValue('');
-        }
-    };
-
-    const addEmoji = ({ colons }) => {
-        setValue((value + ' ' + colons).trim());
-    };
-
-    const handleOutsideClick = (el, event) => {
-
-        if (el && !el.contains(event.target)) {
-            setEmojiPickerVisible(false);
-        }
-    };
-
-    useEffect(() => {
-        const element = document.querySelector('.chat-input__smile-btn');
-
-        document.addEventListener('click', handleOutsideClick.bind(this, element));
-
-        return () => {
-            document.removeEventListener('click', handleOutsideClick.bind(this, element));
-        };
-    }, []);
-
+const ChatInput = ({ value, setValue, emojiPickerVisible, addEmoji, onSelectFiles, handleSendMessage, sendMessage, toggleEmojiPicker, attachments }) => {
     return (
         <>
             <div className="chat-input">
@@ -72,7 +37,7 @@ const ChatInput = ({ onSendMessage, currentDialogId }) => {
                 />
                 <div className="chat-input__actions">
                     <UploadField
-                        onFiles={files => console.log(files)}
+                        onFiles={onSelectFiles}
                         containerProps={{
                             className: 'chat-input__actions-upload-btn'
                         }}
@@ -83,11 +48,18 @@ const ChatInput = ({ onSendMessage, currentDialogId }) => {
                     >
                         <Button type="link" shape="circle" icon={<CameraOutlined />} />
                     </UploadField>
-                    {value ? <Button type="link" shape="circle" icon={<SendOutlined />} /> : <Button type="link" shape="circle" icon={<AudioOutlined />} />}
+                    {value ? (
+                        <Button
+                            type="link"
+                            shape="circle"
+                            icon={<SendOutlined />}
+                            onClick={sendMessage}
+                        />)
+                        : <Button type="link" shape="circle" icon={<AudioOutlined />} />}
                 </div>
             </div >
-            <div>
-                <UploadFiles />
+            <div className="chat-input__attachments">
+                <UploadFiles attachments={attachments} />
             </div>
         </>
     );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Upload, Modal } from 'antd';
 
 function getBase64(file) {
@@ -10,91 +10,67 @@ function getBase64(file) {
     });
 }
 
-class UploadFiles extends React.Component {
-    state = {
+const UploadFiles = ({ attachments }) => {
+    const [state, setState] = useState({
         previewVisible: false,
         previewImage: '',
         previewTitle: '',
-        fileList: [
-            {
-                uid: '-1',
-                name: 'image.png',
-                status: 'done',
-                url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            },
-            {
-                uid: '-2',
-                name: 'image.png',
-                status: 'done',
-                url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            },
-            {
-                uid: '-3',
-                name: 'image.png',
-                status: 'done',
-                url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            },
-            {
-                uid: '-4',
-                name: 'image.png',
-                status: 'done',
-                url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            },
-            {
-                uid: '-xxx',
-                percent: 50,
-                name: 'image.png',
-                status: 'uploading',
-                url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            },
-            {
-                uid: '-5',
-                name: 'image.png',
-                status: 'error',
-            },
-        ],
-    };
+        fileList: attachments,
+    });
 
-    handleCancel = () => this.setState({ previewVisible: false });
+    useEffect(() => {
+        setState({
+            ...state,
+            fileList: attachments,
+        });
+        // eslint-disable-next-line
+    }, [attachments]);
 
-    handlePreview = async file => {
+    const handleCancel = () => setState({ ...state, previewVisible: false });
+
+    const handlePreview = async file => {
         if (!file.url && !file.preview) {
             file.preview = await getBase64(file.originFileObj);
         }
 
-        this.setState({
+        setState({
+            ...state,
             previewImage: file.url || file.preview,
             previewVisible: true,
             previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
         });
     };
 
-    handleChange = ({ fileList }) => this.setState({ fileList });
+    const handleChange = ({ fileList }) =>
+        setState({
+            ...state,
+            fileList,
+        });
 
-    render() {
-        const { previewVisible, previewImage, fileList, previewTitle } = this.state;
+    return (
+        <>
+            <Upload
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                listType="picture-card"
+                fileList={state.fileList}
+                onPreview={handlePreview}
+                onChange={handleChange}
+            >
+            </Upload>
+            <Modal
+                visible={state.previewVisible}
+                title={state.previewTitle}
+                footer={null}
+                onCancel={handleCancel}
+            >
+                <img alt="example" style={{ width: '100%' }} src={state.previewImage} />
+            </Modal>
+        </>
+    );
+};
 
-        return (
-            <>
-                <Upload
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                    listType="picture-card"
-                    fileList={fileList}
-                    onPreview={this.handlePreview}
-                    onChange={this.handleChange}
-                >
-                </Upload>
-                <Modal
-                    visible={previewVisible}
-                    title={previewTitle}
-                    footer={null}
-                    onCancel={this.handleCancel}
-                >
-                    <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                </Modal>
-            </>
-        );
-    }
+UploadFiles.defaultProps = {
+    attachments: []
 }
 
 export default UploadFiles;

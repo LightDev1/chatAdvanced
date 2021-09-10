@@ -3,6 +3,10 @@
    margin: 20px;
    position: relative;
 
+   & > div:first-of-type {
+      display: flex;
+   }
+
    &__smile-btn {
       margin-right: 15px;
    }
@@ -11,6 +15,11 @@
       position: absolute;
       bottom: 50px;
       z-index: 1;
+   }
+
+   &__attachments {
+      padding-top: 10px;
+      padding-left: 67px;
    }
 
    &__actions {

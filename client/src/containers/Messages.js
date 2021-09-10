@@ -31,6 +31,7 @@ const Messages = ({ currentDialogId, user, fetchMessages, addMessage, items, isL
             return;
         }
         messagesRef.current.scrollTo(0, 999999);
+        // eslint-disable-next-line
     }, [items]);
 
     if (!currentDialogId) {
