@@ -22,7 +22,7 @@ const actions = {
     removeMessageById: (id) => dispatch => {
         if (confirm('Удалить сообщение?')) {
             dispatch(actions.setIsLoading(true));
-            messagesApi.removeById(id).then(({ data }) => {
+            messagesApi.removeById(id).then(() => {
                 dispatch({
                     type: 'MESSAGES:REMOVE_MESSAGE',
                     payload: id,
@@ -34,8 +34,8 @@ const actions = {
         }
     },
 
-    fetchSendMessage: (text, dialog) => dispatch => {
-        messagesApi.send(text, dialog);
+    fetchSendMessage: (text, dialog, attachments) => dispatch => {
+        messagesApi.send(text, dialog, attachments);
     },
 
     setIsLoading: bool => ({

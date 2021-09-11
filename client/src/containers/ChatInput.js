@@ -6,12 +6,48 @@ import { messagesActions } from 'redux/actions'
 import { ChatInput as BaseChatInput } from 'components';
 
 const ChatInput = ({ fetchSendMessage, currentDialogId }) => {
+    navigator.getUserMedia = (navigator.getUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia ||
+        navigator.webkitGetUserMedia);
+
     const [value, setValue] = useState('');
     const [attachments, setAttachments] = useState([]);
+    const [mediaRecorder, setMediaRecorder] = useState(null);
     const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
+    const [isRecording, setIsRecording] = useState(false);
 
     const toggleEmojiPicker = () => {
         setEmojiPickerVisible(!emojiPickerVisible);
+    };
+
+    const onRecord = () => {
+        if (navigator.getUserMedia) {
+            navigator.getUserMedia({ audio: true }, onRecording, onError);
+        }
+    };
+
+    const onRecording = (stream) => {
+        const recorder = new MediaRecorder(stream);
+        setMediaRecorder(recorder);
+        recorder.start();
+
+        recorder.onstart = () => {
+            setIsRecording(true);
+        };
+
+        recorder.onstop = () => {
+            setIsRecording(false);
+        };
+
+        recorder.ondataavailable = (event) => {
+            const audioUrl = URL.createObjectURL(event.data);
+            new Audio(audioUrl).play();
+        };
+    };
+
+    const onError = (err) => {
+        console.log('The following error occured: ' + err);
     };
 
     const handleOutsideClick = (el, event) => {
@@ -25,8 +61,9 @@ const ChatInput = ({ fetchSendMessage, currentDialogId }) => {
     };
 
     const sendMessage = () => {
-        fetchSendMessage(value, currentDialogId);
+        fetchSendMessage(value, currentDialogId, attachments.map(file => file.uid));
         setValue('');
+        setAttachments([]);
     };
 
     const handleSendMessage = (event) => {
@@ -35,35 +72,39 @@ const ChatInput = ({ fetchSendMessage, currentDialogId }) => {
         }
     };
 
-    const onUpload = (file, uid) => {
-        filesApi.upload(file).then(({ data }) => {
-            setAttachments(attachments.map(file => {
-                if (file.uid === uid) {
-                    file = {
-                        status: 'done',
-                        uid: data.file._id,
-                        name: data.file.filename,
-                        url: data.file.url,
-                    }
-                }
-
-                return file;
-            }));
-        });
+    const onStopRecording = () => {
+        mediaRecorder.stop();
     };
 
-    const onSelectFiles = (files) => {
+    const onSelectFiles = async (files) => {
         let uploaded = []
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
             const uid = Math.round(Math.random() * 1000)
 
-            uploaded.push({
-                uid,
-                name: file.name,
-                status: 'uploading'
+            uploaded = [
+                ...uploaded,
+                {
+                    uid,
+                    name: file.name,
+                    status: 'uploading'
+                }
+            ];
+            setAttachments(uploaded);
+
+            const { data } = await filesApi.upload(file);
+
+            uploaded = uploaded.map(item => {
+                if (item.uid === uid) {
+                    return {
+                        status: 'done',
+                        uid: data.file._id,
+                        name: data.file.filename,
+                        url: data.file.url,
+                    };
+                }
+                return item;
             });
-            onUpload(file, uid);
         }
         setAttachments(uploaded);
     };
@@ -92,6 +133,9 @@ const ChatInput = ({ fetchSendMessage, currentDialogId }) => {
             sendMessage={sendMessage}
             attachments={attachments}
             onSelectFiles={onSelectFiles}
+            isRecording={isRecording}
+            onRecord={onRecord}
+            onStopRecording={onStopRecording}
         />
     );
 };

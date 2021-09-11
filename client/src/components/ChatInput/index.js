@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input, Button } from 'antd';
-import { SmileOutlined, CameraOutlined, AudioOutlined, SendOutlined } from '@ant-design/icons';
+import { SmileOutlined, CameraOutlined, AudioOutlined, SendOutlined, CloseOutlined } from '@ant-design/icons';
 import { Picker } from 'emoji-mart';
 import { UploadField } from '@navjobs/upload';
 
@@ -9,7 +9,7 @@ import './ChatInput.scss';
 
 const { TextArea } = Input;
 
-const ChatInput = ({ value, setValue, emojiPickerVisible, addEmoji, onSelectFiles, handleSendMessage, sendMessage, toggleEmojiPicker, attachments }) => {
+const ChatInput = ({ value, setValue, emojiPickerVisible, isRecording, addEmoji, onRecord, onStopRecording, onSelectFiles, handleSendMessage, sendMessage, toggleEmojiPicker, attachments }) => {
     return (
         <>
             <div className="chat-input">
@@ -27,14 +27,30 @@ const ChatInput = ({ value, setValue, emojiPickerVisible, addEmoji, onSelectFile
                         onClick={toggleEmojiPicker}
                     />
                 </div>
-                <TextArea
-                    onChange={(event) => { setValue(event.target.value) }}
-                    onKeyUp={handleSendMessage}
-                    placeholder="Введите текст сообщения…"
-                    size="large"
-                    value={value}
-                    autoSize={{ minRows: 1, maxRows: 6 }}
-                />
+                {
+                    isRecording ? (
+                        <div className="chat-input__record-status">
+                            <i className="chat-input__record-status-bubble" ></i>
+                            Recording...
+                            <Button
+                                type="link"
+                                shape="circle"
+                                icon={<CloseOutlined />}
+                                onClick={onStopRecording}
+                                className="stop-recording"
+                            />
+                        </div>) : (
+                        <TextArea
+                            onChange={(event) => { setValue(event.target.value) }}
+                            onKeyUp={handleSendMessage}
+                            placeholder="Введите текст сообщения…"
+                            size="large"
+                            value={value}
+                            autoSize={{ minRows: 1, maxRows: 6 }}
+                        />
+                    )
+                }
+
                 <div className="chat-input__actions">
                     <UploadField
                         onFiles={onSelectFiles}
@@ -48,14 +64,24 @@ const ChatInput = ({ value, setValue, emojiPickerVisible, addEmoji, onSelectFile
                     >
                         <Button type="link" shape="circle" icon={<CameraOutlined />} />
                     </UploadField>
-                    {value ? (
+                    {isRecording || value ? (
                         <Button
                             type="link"
                             shape="circle"
                             icon={<SendOutlined />}
                             onClick={sendMessage}
                         />)
-                        : <Button type="link" shape="circle" icon={<AudioOutlined />} />}
+                        : (
+                            <div className="chat-input-record-btn">
+                                <Button
+                                    type="link"
+                                    shape="circle"
+                                    icon={<AudioOutlined />}
+                                    onClick={onRecord}
+                                />
+                            </div>
+                        )
+                    }
                 </div>
             </div >
             <div className="chat-input__attachments">
