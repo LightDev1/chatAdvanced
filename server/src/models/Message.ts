@@ -30,7 +30,6 @@ export interface MessageModelInterface {
 const MessageSchema = new Schema<MessageModelInterface>({
     text: {
         type: String,
-        required: true
     },
     dialog: {
         type: Types.ObjectId,

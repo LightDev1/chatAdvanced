@@ -9,7 +9,7 @@ import './ChatInput.scss';
 
 const { TextArea } = Input;
 
-const ChatInput = ({ value, setValue, emojiPickerVisible, isRecording, addEmoji, onRecord, onStopRecording, onSelectFiles, handleSendMessage, sendMessage, toggleEmojiPicker, attachments }) => {
+const ChatInput = ({ value, setValue, emojiPickerVisible, isRecording, addEmoji, onRecord, onHideRecording, onStopRecording, onSelectFiles, handleSendMessage, sendMessage, toggleEmojiPicker, attachments }) => {
     return (
         <>
             <div className="chat-input">
@@ -36,7 +36,7 @@ const ChatInput = ({ value, setValue, emojiPickerVisible, isRecording, addEmoji,
                                 type="link"
                                 shape="circle"
                                 icon={<CloseOutlined />}
-                                onClick={onStopRecording}
+                                onClick={onHideRecording}
                                 className="stop-recording"
                             />
                         </div>) : (
@@ -58,13 +58,13 @@ const ChatInput = ({ value, setValue, emojiPickerVisible, isRecording, addEmoji,
                             className: 'chat-input__actions-upload-btn'
                         }}
                         uploadProps={{
-                            accept: '.jpg,.jpeg,.png,.gif,.bmp',
+                            accept: '.jpg,.jpeg,.png,.gif,.bmp,.ogg',
                             multiple: 'multiple'
                         }}
                     >
                         <Button type="link" shape="circle" icon={<CameraOutlined />} />
                     </UploadField>
-                    {isRecording || value ? (
+                    {isRecording || value || attachments.length ? (
                         <Button
                             type="link"
                             shape="circle"

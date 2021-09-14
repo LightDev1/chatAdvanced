@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { Empty } from 'antd';
 
@@ -8,6 +8,7 @@ import { Messages as BaseMessages } from 'components';
 
 const Messages = ({ currentDialogId, user, fetchMessages, addMessage, items, isLoading, removeMessageById }) => {
     const messagesRef = useRef(null);
+    const [previewImage, setPreviewImage] = useState(null);
 
     const onNewMessage = (data) => {
         addMessage(data);
@@ -44,6 +45,8 @@ const Messages = ({ currentDialogId, user, fetchMessages, addMessage, items, isL
         items={items}
         isLoading={isLoading}
         onRemoveMessage={removeMessageById}
+        setPreviewImage={setPreviewImage}
+        previewImage={previewImage}
     />;
 };
 

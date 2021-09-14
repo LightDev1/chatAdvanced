@@ -40,9 +40,11 @@ const ChatInput = ({ fetchSendMessage, currentDialogId }) => {
             setIsRecording(false);
         };
 
-        recorder.ondataavailable = (event) => {
-            const audioUrl = URL.createObjectURL(event.data);
-            new Audio(audioUrl).play();
+        recorder.ondataavailable = async (event) => {
+            const file = new File([event.data], 'audio.ogg', { type: 'audio/ogg' });
+
+            const { data } = await filesApi.upload(file);
+            sendAudio(data.file._id);
         };
     };
 
@@ -60,20 +62,39 @@ const ChatInput = ({ fetchSendMessage, currentDialogId }) => {
         setValue((value + ' ' + colons).trim());
     };
 
+    const sendAudio = (audioId) => {
+        onStopRecording();
+        fetchSendMessage({
+            text: value,
+            dialog: currentDialogId,
+            attachments: [audioId]
+        });
+    };
+
     const sendMessage = () => {
-        fetchSendMessage(value, currentDialogId, attachments.map(file => file.uid));
+        fetchSendMessage({
+            text: value,
+            dialog: currentDialogId,
+            attachments: attachments.map(file => file.uid)
+        });
         setValue('');
         setAttachments([]);
     };
 
     const handleSendMessage = (event) => {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && value.trim() !== '') {
             sendMessage();
+        } else {
+            return;
         }
     };
 
     const onStopRecording = () => {
         mediaRecorder.stop();
+    };
+
+    const onHideRecording = () => {
+        setIsRecording(false);
     };
 
     const onSelectFiles = async (files) => {
@@ -136,6 +157,7 @@ const ChatInput = ({ fetchSendMessage, currentDialogId }) => {
             isRecording={isRecording}
             onRecord={onRecord}
             onStopRecording={onStopRecording}
+            onHideRecording={onHideRecording}
         />
     );
 };

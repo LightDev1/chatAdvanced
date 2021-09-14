@@ -8,7 +8,7 @@ class UploadFileController {
         const file = req.file;
         const userId = req.user._id;
 
-        cloudinary.uploader.upload_stream({}, (err, result) => {
+        cloudinary.uploader.upload_stream({ resource_type: "auto" }, (err, result) => {
             if (err || !result) {
                 return res.status(500).json({
                     status: 'error',
