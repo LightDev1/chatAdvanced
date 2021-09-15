@@ -7,7 +7,7 @@ import { dialogActions } from '../../redux/actions';
 
 import './Home.scss';
 
-const Home = ({ location, setCurrentDialogId }) => {
+const Home = ({ location, setCurrentDialogId, user }) => {
     useEffect(() => {
         const { pathname } = location;
         const dialodId = pathname.split('/').pop();
@@ -19,16 +19,16 @@ const Home = ({ location, setCurrentDialogId }) => {
         <section className="home">
             <div className="chat">
                 <Sidebar />
-                <div className="chat__current-dialog">
+                {user && <div className="chat__current-dialog">
                     <Status online />
                     <Messages />
                     <div className="chat__dialog-input">
                         <ChatInput />
                     </div>
-                </div>
+                </div>}
             </div>
         </section>
     );
 };
 
-export default withRouter(connect(({ dialogs }) => dialogs, dialogActions)(Home));
+export default withRouter(connect(({ user }) => ({ user: user.data }), dialogActions)(Home));

@@ -10,7 +10,7 @@ function getBase64(file) {
     });
 }
 
-const UploadFiles = ({ attachments }) => {
+const UploadFiles = ({ attachments, removeAttachment }) => {
     const [state, setState] = useState({
         previewVisible: false,
         previewImage: '',
@@ -55,6 +55,7 @@ const UploadFiles = ({ attachments }) => {
                 fileList={state.fileList}
                 onPreview={handlePreview}
                 onChange={handleChange}
+                onRemove={(file) => removeAttachment(file)}
             >
             </Upload>
             <Modal

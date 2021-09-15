@@ -10,6 +10,16 @@ export default (http: Server) => {
 
     io.on("connection", (socket: Socket) => {
         console.log('Пользователь подключен', socket.id);
+
+        socket.on('DIALOGS:JOIN', (dialogId: string) => {
+            socket.data.dialogId = dialogId;
+            socket.join(dialogId);
+            console.log(dialogId);
+        });
+
+        socket.on('DIALOGS:TYPING', (obj: any) => {
+            socket.to(obj.dialogId).emit('DIALOGS:TYPING', obj);
+        });
     });
 
     return io;

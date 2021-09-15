@@ -4,12 +4,10 @@ import { connect } from 'react-redux';
 import socket from 'core/socket';
 import { dialogActions } from '../redux/actions';
 import { Dialogs as BaseDialogs } from 'components';
-import { useHistory } from 'react-router';
 
 const Dialogs = ({ fetchDialogs, currentDialogId, items, userId }) => {
     const [searchValue, setSearchValue] = useState('');
     const [filtered, setFiltered] = useState(Array.from(items));
-    const history = useHistory();
 
     const onChangeInput = (event) => {
         const value = event.target.value;
@@ -34,7 +32,6 @@ const Dialogs = ({ fetchDialogs, currentDialogId, items, userId }) => {
     useEffect(() => {
         if (!items.length) {
             fetchDialogs();
-            history.push('/');
         } else {
             setFiltered(items);
         }

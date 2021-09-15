@@ -7,18 +7,19 @@ import { Message } from 'components';
 
 import './Messages.scss';
 
-const Messages = ({ blockRef, isLoading, items, user, onRemoveMessage, previewImage, setPreviewImage }) => {
+const Messages = ({ blockRef, isLoading, items, isTyping, user, blockHeight, onRemoveMessage, previewImage, setPreviewImage, partner }) => {
+    console.log(partner);
     return (
         <div
             className="chat__dialog-messages"
-            style={{ height: `calc(100% - 245px)` }}
+            style={{ height: `calc(100% - ${blockHeight}px)` }}
         >
             <div
                 ref={blockRef}
                 className={classNames('messages', { 'messages--loading': isLoading })}
             >
                 {
-                    isLoading ? (
+                    isLoading && !user ? (
                         <Spin
                             indicator={LoadingOutlined}
                             tip="Загрузка сообщений..."
@@ -35,6 +36,7 @@ const Messages = ({ blockRef, isLoading, items, user, onRemoveMessage, previewIm
                         )) : <Empty description="Нет сообщений" />
                     ) : <Empty description="Выберите диалог" />
                 }
+                {isTyping && <Message isTyping={isTyping} user={partner} />}
                 <Modal
                     visible={!!previewImage}
                     footer={null}

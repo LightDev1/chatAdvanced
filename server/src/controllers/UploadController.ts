@@ -39,10 +39,6 @@ class UploadFileController {
             });
         }).end(file?.buffer);
     }
-
-    delete(req: express.Request, res: express.Response) {
-
-    }
 }
 
 const uploadFileCtrl = new UploadFileController();

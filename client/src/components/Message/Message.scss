@@ -125,8 +125,9 @@
       }
 
       #{$self}__audio {
+         position: relative;
          padding: 15px;
-         background-color: #1890ff;
+         background-color: #3674FF;
          border-radius: 6px 6px 0 6px;
          width: 250px;
          overflow: hidden;
@@ -152,6 +153,8 @@
 
             img {
                height: 13px;
+               position: relative;
+               left: 1px;
             }
            }
          }

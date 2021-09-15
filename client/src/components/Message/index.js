@@ -8,7 +8,7 @@ import { Emoji } from 'emoji-mart';
 
 import { Time, MessageIconReaded, Avatar } from '../index';
 
-import { convertCurrentTime } from 'utils/helpers';
+import { convertCurrentTime, isAudio } from 'utils/helpers';
 
 import waveSvg from 'assets/img/waves.svg';
 import playSvg from 'assets/img/play.svg';
@@ -73,7 +73,6 @@ const MessageAudio = ({ audioSrc }) => {
 
 const Message = ({ read, user, text, date, isMe, attachments, isTyping, audio, onRemoveMessage, setPreviewImage }) => {
     const renderAttachmentItem = (item) => {
-        console.log(item);
         if (item.ext !== 'webm') {
             return (
                 <div key={item._id} onClick={() => setPreviewImage(item.url)} className="message__attachments-item">
@@ -84,21 +83,16 @@ const Message = ({ read, user, text, date, isMe, attachments, isTyping, audio, o
                 </div>
             );
         } else {
-            return <MessageAudio audioSrc={item.url} />
+            return <MessageAudio key={item._id} audioSrc={item.url} />
         }
-    };
-
-    const isAudio = () => {
-        const file = attachments[0];
-        return attachments.length && file.ext === 'webm';
     };
 
     return (
         <div className={classNames('message', {
             'message--isme': isMe,
             'message--is-typing': isTyping,
-            'message--is-audio': isAudio(),
-            'message--image': !isAudio() && attachments && attachments.length === 1 && !text,
+            'message--is-audio': isAudio(attachments),
+            'message--image': !isAudio(attachments) && attachments && attachments.length === 1 && !text,
         })}>
             <div className="message__content">
                 <MessageIconReaded isMe={isMe} isReaded={read} />
@@ -123,7 +117,7 @@ const Message = ({ read, user, text, date, isMe, attachments, isTyping, audio, o
                     <Avatar user={user} />
                 </div>
                 <div className="message__info">
-                    {text && (
+                    {(text || isTyping) && (
                         <div className="message__bubble">
                             {text && <p className="message__text">{reactStringReplace(text, /:(.+?):/g, (match, i) => (
                                 <Emoji key={i} emoji={match} set="apple" size={16} />

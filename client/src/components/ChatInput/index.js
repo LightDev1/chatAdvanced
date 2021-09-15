@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input, Button } from 'antd';
-import { SmileOutlined, CameraOutlined, AudioOutlined, SendOutlined, CloseOutlined } from '@ant-design/icons';
+import { SmileOutlined, CameraOutlined, AudioOutlined, SendOutlined, LoadingOutlined, CloseOutlined } from '@ant-design/icons';
 import { Picker } from 'emoji-mart';
 import { UploadField } from '@navjobs/upload';
 
@@ -9,7 +9,7 @@ import './ChatInput.scss';
 
 const { TextArea } = Input;
 
-const ChatInput = ({ value, setValue, emojiPickerVisible, isRecording, addEmoji, onRecord, onHideRecording, onStopRecording, onSelectFiles, handleSendMessage, sendMessage, toggleEmojiPicker, attachments }) => {
+const ChatInput = ({ value, setValue, emojiPickerVisible, isLoading, isRecording, addEmoji, onRecord, sendMessage, onHideRecording, removeAttachment, onSelectFiles, handleSendMessage, toggleEmojiPicker, attachments }) => {
     return (
         <>
             <div className="chat-input">
@@ -64,13 +64,19 @@ const ChatInput = ({ value, setValue, emojiPickerVisible, isRecording, addEmoji,
                     >
                         <Button type="link" shape="circle" icon={<CameraOutlined />} />
                     </UploadField>
-                    {isRecording || value || attachments.length ? (
+                    {isLoading ? (
                         <Button
                             type="link"
                             shape="circle"
-                            icon={<SendOutlined />}
+                            icon={<LoadingOutlined />}
                             onClick={sendMessage}
-                        />)
+                        />) : isRecording || value || attachments.length ? (
+                            <Button
+                                type="link"
+                                shape="circle"
+                                icon={<SendOutlined />}
+                                onClick={sendMessage}
+                            />)
                         : (
                             <div className="chat-input-record-btn">
                                 <Button
@@ -84,9 +90,9 @@ const ChatInput = ({ value, setValue, emojiPickerVisible, isRecording, addEmoji,
                     }
                 </div>
             </div >
-            <div className="chat-input__attachments">
-                <UploadFiles attachments={attachments} />
-            </div>
+            {attachments.length > 0 && <div className="chat-input__attachments">
+                <UploadFiles attachments={attachments} removeAttachment={removeAttachment} />
+            </div>}
         </>
     );
 };
